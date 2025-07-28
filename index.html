@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for better aesthetics */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+        }
+        /* Custom styles for the like button SVG */
+        .like-button svg {
+            transition: fill 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .like-button.liked svg {
+            fill: #ef4444; /* Red color when liked */
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-5xl">
+        <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-8">Student Information System</h1>
+
+        <!-- Student Input Form -->
+        <form id="studentForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 p-6 bg-blue-50 rounded-lg shadow-inner">
+            <div class="flex flex-col">
+                <label for="studentName" class="text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input type="text" id="studentName" placeholder="Enter student name" required
+                       class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
+            </div>
+            <div class="flex flex-col">
+                <label for="studentMajor" class="text-sm font-medium text-gray-700 mb-1">Major</label>
+                <input type="text" id="studentMajor" placeholder="Enter major" required
+                       class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
+            </div>
+            <div class="flex flex-col">
+                <label for="studentYear" class="text-sm font-medium text-gray-700 mb-1">Year</label>
+                <input type="number" id="studentYear" placeholder="Enter year" required min="1"
+                       class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
+            </div>
+            <div class="flex flex-col">
+                <label for="studentPhone" class="text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <input type="tel" id="studentPhone" placeholder="Enter phone number" required
+                       class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
+            </div>
+            <div class="md:col-span-2 lg:col-span-4 flex justify-center mt-4">
+                <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                    Add Student
+                </button>
+            </div>
+        </form>
+
+        <!-- Student List Cards -->
+        <div id="studentCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Student cards will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Get references to the form and the container for student cards
+        const studentForm = document.getElementById('studentForm');
+        const studentCardsContainer = document.getElementById('studentCardsContainer');
+
+        // Function to generate a placeholder image URL
+        function getPlaceholderImage(name) {
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+            const colors = ['4F46E5', 'EC4899', '10B981', 'F59E0B', '6366F1', 'EF4444']; // Different background colors
+            const textColor = 'FFFFFF'; // White text
+            const hash = initials.charCodeAt(0) + initials.charCodeAt(initials.length - 1);
+            const color = colors[hash % colors.length];
+            return `https://placehold.co/100x100/${color}/${textColor}?text=${initials}`;
+        }
+
+        // Add event listener for form submission
+        studentForm.addEventListener('submit', function(event) {
+            // Prevent the default form submission behavior (page reload)
+            event.preventDefault();
+
+            // Get values from input fields
+            const name = document.getElementById('studentName').value;
+            const major = document.getElementById('studentMajor').value;
+            const year = document.getElementById('studentYear').value;
+            const phone = document.getElementById('studentPhone').value;
+
+            // Create a new student card div
+            const studentCard = document.createElement('div');
+            studentCard.classList.add(
+                'bg-white', 'rounded-xl', 'shadow-md', 'p-6', 'flex', 'flex-col', 'items-center',
+                'text-center', 'transform', 'hover:scale-105', 'transition', 'duration-300', 'ease-in-out',
+                'border', 'border-gray-200'
+            );
+
+            // Create and append the image element
+            const img = document.createElement('img');
+            img.src = getPlaceholderImage(name);
+            img.alt = name;
+            img.classList.add('w-24', 'h-24', 'rounded-full', 'object-cover', 'mb-4', 'border-4', 'border-blue-200');
+            studentCard.appendChild(img);
+
+            // Create and append student details
+            const nameElement = document.createElement('h3');
+            nameElement.classList.add('text-xl', 'font-semibold', 'text-gray-900', 'mb-2');
+            nameElement.textContent = name;
+            studentCard.appendChild(nameElement);
+
+            const majorElement = document.createElement('p');
+            majorElement.classList.add('text-gray-700', 'text-sm', 'mb-1');
+            majorElement.textContent = `Major: ${major}`;
+            studentCard.appendChild(majorElement);
+
+            const yearElement = document.createElement('p');
+            yearElement.classList.add('text-gray-700', 'text-sm', 'mb-1');
+            yearElement.textContent = `Year: ${year}`;
+            studentCard.appendChild(yearElement);
+
+            const phoneElement = document.createElement('p');
+            phoneElement.classList.add('text-gray-700', 'text-sm', 'mb-4');
+            phoneElement.textContent = `Phone: ${phone}`;
+            studentCard.appendChild(phoneElement);
+
+            // Create the like button
+            const likeButton = document.createElement('button');
+            likeButton.classList.add(
+                'like-button', 'flex', 'items-center', 'justify-center', 'p-2', 'rounded-full',
+                'bg-gray-100', 'hover:bg-gray-200', 'focus:outline-none', 'focus:ring-2', 'focus:ring-red-400',
+                'transition', 'duration-200', 'ease-in-out'
+            );
+            likeButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart text-gray-400">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+            `;
+            likeButton.addEventListener('click', function() {
+                likeButton.classList.toggle('liked'); // Toggle the 'liked' class
+            });
+            studentCard.appendChild(likeButton);
+
+            // Append the new card to the container
+            studentCardsContainer.appendChild(studentCard);
+
+            // Clear the form fields after submission
+            studentForm.reset();
+        });
+    </script>
+</body>
+</html>
