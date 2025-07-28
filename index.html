@@ -26,6 +26,11 @@
     <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-5xl">
         <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-8">Student Information System</h1>
 
+        <!-- User ID Display -->
+        <div class="text-center text-sm text-gray-600 mb-4">
+            Your User ID: <span id="userIdDisplay" class="font-mono bg-gray-100 p-1 rounded">Loading...</span>
+        </div>
+
         <!-- Student Input Form -->
         <form id="studentForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 p-6 bg-blue-50 rounded-lg shadow-inner">
             <div class="flex flex-col">
@@ -59,13 +64,34 @@
         <!-- Student List Cards -->
         <div id="studentCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             <!-- Student cards will be inserted here by JavaScript -->
+            <p id="loadingMessage" class="col-span-full text-center text-gray-500">Loading students...</p>
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        // Firebase imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables for Firebase (provided by Canvas environment)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let currentUserId = null;
+        let isAuthReady = false;
+
         // Get references to the form and the container for student cards
         const studentForm = document.getElementById('studentForm');
         const studentCardsContainer = document.getElementById('studentCardsContainer');
+        const userIdDisplay = document.getElementById('userIdDisplay');
+        const loadingMessage = document.getElementById('loadingMessage');
 
         // Function to generate a placeholder image URL
         function getPlaceholderImage(name) {
@@ -77,75 +103,165 @@
             return `https://placehold.co/100x100/${color}/${textColor}?text=${initials}`;
         }
 
-        // Add event listener for form submission
-        studentForm.addEventListener('submit', function(event) {
-            // Prevent the default form submission behavior (page reload)
-            event.preventDefault();
-
-            // Get values from input fields
-            const name = document.getElementById('studentName').value;
-            const major = document.getElementById('studentMajor').value;
-            const year = document.getElementById('studentYear').value;
-            const phone = document.getElementById('studentPhone').value;
-
-            // Create a new student card div
+        // Function to create a student card element
+        function createStudentCard(studentData, docId) {
             const studentCard = document.createElement('div');
             studentCard.classList.add(
                 'bg-white', 'rounded-xl', 'shadow-md', 'p-6', 'flex', 'flex-col', 'items-center',
                 'text-center', 'transform', 'hover:scale-105', 'transition', 'duration-300', 'ease-in-out',
                 'border', 'border-gray-200'
             );
+            studentCard.dataset.docId = docId; // Store Firestore document ID
 
-            // Create and append the image element
             const img = document.createElement('img');
-            img.src = getPlaceholderImage(name);
-            img.alt = name;
+            img.src = getPlaceholderImage(studentData.name);
+            img.alt = studentData.name;
             img.classList.add('w-24', 'h-24', 'rounded-full', 'object-cover', 'mb-4', 'border-4', 'border-blue-200');
             studentCard.appendChild(img);
 
-            // Create and append student details
             const nameElement = document.createElement('h3');
             nameElement.classList.add('text-xl', 'font-semibold', 'text-gray-900', 'mb-2');
-            nameElement.textContent = name;
+            nameElement.textContent = studentData.name;
             studentCard.appendChild(nameElement);
 
             const majorElement = document.createElement('p');
             majorElement.classList.add('text-gray-700', 'text-sm', 'mb-1');
-            majorElement.textContent = `Major: ${major}`;
+            majorElement.textContent = `Major: ${studentData.major}`;
             studentCard.appendChild(majorElement);
 
             const yearElement = document.createElement('p');
             yearElement.classList.add('text-gray-700', 'text-sm', 'mb-1');
-            yearElement.textContent = `Year: ${year}`;
+            yearElement.textContent = `Year: ${studentData.year}`;
             studentCard.appendChild(yearElement);
 
             const phoneElement = document.createElement('p');
             phoneElement.classList.add('text-gray-700', 'text-sm', 'mb-4');
-            phoneElement.textContent = `Phone: ${phone}`;
+            phoneElement.textContent = `Phone: ${studentData.phone}`;
             studentCard.appendChild(phoneElement);
 
-            // Create the like button
             const likeButton = document.createElement('button');
             likeButton.classList.add(
                 'like-button', 'flex', 'items-center', 'justify-center', 'p-2', 'rounded-full',
                 'bg-gray-100', 'hover:bg-gray-200', 'focus:outline-none', 'focus:ring-2', 'focus:ring-red-400',
                 'transition', 'duration-200', 'ease-in-out'
             );
+            // Set initial liked state based on data
+            if (studentData.liked) {
+                likeButton.classList.add('liked');
+            }
             likeButton.innerHTML = `
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart text-gray-400">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
             `;
-            likeButton.addEventListener('click', function() {
-                likeButton.classList.toggle('liked'); // Toggle the 'liked' class
+            likeButton.addEventListener('click', async function() {
+                // Toggle the liked state in Firestore
+                const newLikedState = !studentCard.classList.contains('liked');
+                likeButton.classList.toggle('liked', newLikedState); // Visually update immediately
+                try {
+                    const studentDocRef = doc(db, `artifacts/${appId}/public/data/students`, docId);
+                    await updateDoc(studentDocRef, { liked: newLikedState });
+                    console.log(`Student ${docId} liked state updated to ${newLikedState}`);
+                } catch (error) {
+                    console.error("Error updating liked state:", error);
+                    // Revert visual state if update fails
+                    likeButton.classList.toggle('liked', !newLikedState);
+                }
             });
             studentCard.appendChild(likeButton);
 
-            // Append the new card to the container
-            studentCardsContainer.appendChild(studentCard);
+            return studentCard;
+        }
 
-            // Clear the form fields after submission
-            studentForm.reset();
+        // Authentication State Listener
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserId = user.uid;
+                userIdDisplay.textContent = currentUserId;
+                isAuthReady = true;
+                console.log("Firebase authenticated. User ID:", currentUserId);
+                // Start listening for student data after authentication
+                listenForStudentData();
+            } else {
+                // Sign in anonymously if no user is authenticated
+                try {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                } catch (error) {
+                    console.error("Error during authentication:", error);
+                    userIdDisplay.textContent = "Authentication failed.";
+                    loadingMessage.textContent = "Failed to load student data. Please try again.";
+                }
+            }
+        });
+
+        // Listen for student data changes in Firestore
+        function listenForStudentData() {
+            if (!isAuthReady) {
+                console.warn("Authentication not ready. Cannot listen for data.");
+                return;
+            }
+
+            const studentsCollectionRef = collection(db, `artifacts/${appId}/public/data/students`);
+            const q = query(studentsCollectionRef);
+
+            onSnapshot(q, (snapshot) => {
+                loadingMessage.style.display = 'none'; // Hide loading message once data starts coming
+                studentCardsContainer.innerHTML = ''; // Clear existing cards
+                if (snapshot.empty) {
+                    studentCardsContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">No students added yet.</p>';
+                } else {
+                    snapshot.forEach((doc) => {
+                        const studentData = doc.data();
+                        const docId = doc.id;
+                        const card = createStudentCard(studentData, docId);
+                        studentCardsContainer.appendChild(card);
+                    });
+                }
+            }, (error) => {
+                console.error("Error fetching student data:", error);
+                loadingMessage.textContent = "Error loading student data.";
+            });
+        }
+
+
+        // Add event listener for form submission
+        studentForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            if (!isAuthReady || !currentUserId) {
+                console.warn("Authentication not ready. Cannot add student.");
+                alert("Please wait for authentication to complete before adding a student."); // Using alert as a temporary visual cue
+                return;
+            }
+
+            const name = document.getElementById('studentName').value;
+            const major = document.getElementById('studentMajor').value;
+            const year = parseInt(document.getElementById('studentYear').value);
+            const phone = document.getElementById('studentPhone').value;
+
+            try {
+                // Add a new document to the 'students' collection
+                const docRef = await addDoc(collection(db, `artifacts/${appId}/public/data/students`), {
+                    name: name,
+                    major: major,
+                    year: year,
+                    phone: phone,
+                    liked: false, // Initial liked state
+                    createdAt: new Date() // Timestamp for ordering
+                });
+                console.log("Document written with ID: ", docRef.id);
+                studentForm.reset(); // Clear the form fields
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                // In a real app, you'd show a user-friendly error message
+                alert("Failed to add student. Please try again.");
+            }
         });
     </script>
 </body>
