@@ -236,7 +236,16 @@
 
             if (!isAuthReady || !currentUserId) {
                 console.warn("Authentication not ready. Cannot add student.");
-                alert("Please wait for authentication to complete before adding a student."); // Using alert as a temporary visual cue
+                // Using a custom modal or message box instead of alert() for better UX
+                const messageBox = document.createElement('div');
+                messageBox.classList.add('fixed', 'inset-0', 'bg-gray-600', 'bg-opacity-50', 'flex', 'items-center', 'justify-center', 'z-50');
+                messageBox.innerHTML = `
+                    <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+                        <p class="text-lg font-semibold mb-4">Please wait for authentication to complete before adding a student.</p>
+                        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg" onclick="this.parentNode.parentNode.remove()">OK</button>
+                    </div>
+                `;
+                document.body.appendChild(messageBox);
                 return;
             }
 
@@ -260,7 +269,15 @@
             } catch (e) {
                 console.error("Error adding document: ", e);
                 // In a real app, you'd show a user-friendly error message
-                alert("Failed to add student. Please try again.");
+                const messageBox = document.createElement('div');
+                messageBox.classList.add('fixed', 'inset-0', 'bg-gray-600', 'bg-opacity-50', 'flex', 'items-center', 'justify-center', 'z-50');
+                messageBox.innerHTML = `
+                    <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+                        <p class="text-lg font-semibold mb-4">Failed to add student. Please try again.</p>
+                        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg" onclick="this.parentNode.parentNode.remove()">OK</button>
+                    </div>
+                `;
+                document.body.appendChild(messageBox);
             }
         });
     </script>
