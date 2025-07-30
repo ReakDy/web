@@ -3,283 +3,855 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Information</title>
+    <title>MiNi 7 Market</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons (search, filter, category icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Custom font for better aesthetics */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Light blue-gray background */
+            background-color: #f8f8f8; /* Lighter background to match the image */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        /* Custom styles for the like button SVG */
-        .like-button svg {
-            transition: fill 0.2s ease-in-out, transform 0.2s ease-in-out;
+        /* Custom styles for rounded corners and shadows (optional, as Tailwind has classes) */
+        .card {
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
         }
-        .like-button.liked svg {
-            fill: #ef4444; /* Red color when liked */
-            transform: scale(1.1);
+        /* Modal specific styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
+            display: none; /* Changed from flex to none by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0; /* Still use opacity for transition */
+            transition: opacity 0.3s ease; /* Transition only opacity */
+        }
+        .modal-overlay.show {
+            display: flex; /* Changed from opacity/visibility to flex */
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 30px; /* Increased padding */
+            border-radius: 12px; /* Slightly more rounded */
+            max-width: 450px; /* Slightly wider */
+            width: 90%; /* Responsive width */
+            text-align: center;
+            position: relative; /* For absolute positioning of close button */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* More prominent shadow */
+            transform: translateY(-20px); /* Initial slight raise */
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.show .modal-content {
+            transform: translateY(0); /* Drop into place */
+        }
+        .modal-close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.8em; /* Larger close button */
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .modal-close-button:hover {
+            color: #333;
+        }
+        /* ABA KHQR specific styling within the modal */
+        .aba-khqr-header {
+            font-size: 1.8em; /* Larger header */
+            font-weight: bold;
+            color: #E4002B; /* ABA Red */
+            margin-bottom: 15px;
+        }
+        .aba-khqr-info p {
+            margin-bottom: 5px;
+            font-size: 1.1em;
+            color: #333;
+        }
+        .aba-khqr-amount {
+            font-size: 2.8em; /* Much larger amount */
+            font-weight: bold;
+            color: #E4002B; /* ABA Red */
+            margin: 20px 0;
+        }
+        .aba-khqr-qr-container img {
+            width: 100%;
+            max-width: 280px; /* Max size for QR */
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            border: 1px solid #eee; /* Subtle border for QR */
+            padding: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for QR */
+        }
+        .aba-khqr-instructions {
+            margin-top: 25px;
+            font-size: 1em;
+            color: #555;
+            line-height: 1.4;
+        }
+        .aba-khqr-print-button {
+            background-color: #4f46e5; /* Tailwind indigo-500 */
+            color: white;
+            padding: 12px 25px; /* Larger button */
+            border-radius: 8px; /* More rounded */
+            margin-top: 30px;
+            cursor: pointer;
+            border: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+        .aba-khqr-print-button:hover {
+            background-color: #4338ca; /* Darker indigo on hover */
+            transform: translateY(-1px);
+        }
+        /* Styling for print output only */
+        @media print {
+            body > *:not(.modal-overlay.show) {
+                display: none !important; /* Hide everything except the visible modal */
+            }
+            .modal-overlay {
+                position: static !important; /* Remove fixed positioning for print */
+                background-color: transparent !important; /* No background overlay */
+                opacity: 1 !important;
+                visibility: visible !important;
+                display: block !important;
+                padding: 0;
+                margin: 0;
+            }
+            .modal-content {
+                box-shadow: none !important; /* No shadow in print */
+                border-radius: 0 !important; /* No border-radius in print */
+                padding: 0 !important;
+                max-width: 100% !important;
+                width: auto !important;
+                transform: none !important;
+            }
+            .modal-close-button, .aba-khqr-print-button, #paymentStatusMessage {
+                display: none !important; /* Hide buttons and status message in print */
+            }
+            .aba-khqr-qr-container img {
+                border: none !important; /* No border for QR in print */
+                box-shadow: none !important; /* No shadow for QR in print */
+            }
+        }
+        /* Product grid container */
+        .product-grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+            gap: 24px; /* Gap between cards */
+            max-width: 1200px; /* Max width for the grid */
+            margin-bottom: 40px; /* Space below the grid */
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        /* Style for hidden sections/products */
+        .hidden-section {
+            display: none !important;
+        }
+
+        /* Custom .hidden class to ensure display: none is always applied */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Custom styling for the promotional banner */
+        .promo-banner {
+            background-image: url('image_d0ce00.png'); /* Set to the "Fresh Groceries" banner image */
+            background-size: cover;
+            background-position: center;
+            border-radius: 1rem; /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            min-height: 180px; /* Adjusted height for better visual */
+        }
+
+        /* Category icon styling */
+        .category-icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 90px; /* Fixed width for each icon */
+            height: 90px; /* Fixed height for each icon */
+            background-color: white;
+            border-radius: 1rem; /* rounded-xl */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            flex-shrink: 0; /* Prevent shrinking in flex container */
+        }
+        .category-icon-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .category-icon-item i {
+            font-size: 2.2rem; /* Larger icon size */
+            color: #20c997; /* Teal color for icons */
+            margin-bottom: 0.5rem;
+        }
+        .category-icon-item span {
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: 500;
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-5xl">
-        <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-8">Student Information System</h1>
+<body>
 
-        <!-- User ID Display -->
-        <div class="text-center text-sm text-gray-600 mb-4">
-            Your User ID: <span id="userIdDisplay" class="font-mono bg-gray-100 p-1 rounded">Loading...</span>
-        </div>
+    <div id="main-content">
+        <header class="w-full bg-white p-4 shadow-sm">
+            <div class="flex items-center justify-between max-w-6xl mx-auto">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <img src="image_d06143.png" alt="MiNi 7 Market Logo" class="h-10 w-auto rounded-full">
+                    <div class="flex items-center text-gray-700 text-sm">
+                        <i class="fas fa-map-marker-alt mr-1 text-red-500"></i>
+                        <span>Jaipur, Rajasthan</span>
+                        <i class="fas fa-chevron-down ml-1 text-gray-500 text-xs"></i>
+                    </div>
+                </div>
+                <!-- Settings Icon -->
+                <div class="text-gray-600 text-2xl cursor-pointer">
+                    <i class="fas fa-cog"></i>
+                </div>
+            </div>
 
-        <!-- Student Input Form -->
-        <form id="studentForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 p-6 bg-blue-50 rounded-lg shadow-inner">
-            <div class="flex flex-col">
-                <label for="studentName" class="text-sm font-medium text-gray-700 mb-1">Name</label>
-                <input type="text" id="studentName" placeholder="Enter student name" required
-                       class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
-            </div>
-            <div class="flex flex-col">
-                <label for="studentMajor" class="text-sm font-medium text-gray-700 mb-1">Major</label>
-                <input type="text" id="studentMajor" placeholder="Enter major" required
-                       class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
-            </div>
-            <div class="flex flex-col">
-                <label for="studentYear" class="text-sm font-medium text-gray-700 mb-1">Year</label>
-                <input type="number" id="studentYear" placeholder="Enter year" required min="1"
-                       class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
-            </div>
-            <div class="flex flex-col">
-                <label for="studentPhone" class="text-sm font-medium text-gray-700 mb-1">Phone</label>
-                <input type="tel" id="studentPhone" placeholder="Enter phone number" required
-                       class="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
-            </div>
-            <div class="md:col-span-2 lg:col-span-4 flex justify-center mt-4">
-                <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
-                    Add Student
+            <!-- Search Bar -->
+            <div class="mt-4 flex items-center justify-center max-w-6xl mx-auto px-2">
+                <div class="relative flex-grow">
+                    <input type="text" id="search-input" placeholder="Search" class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-400 text-gray-700 text-lg">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+                <button id="search-button" class="ml-3 p-3 bg-teal-500 hover:bg-teal-600 text-white rounded-xl transition-colors duration-300 shadow-md">
+                    <i class="fas fa-sliders-h text-xl"></i> <!-- Filter icon -->
                 </button>
             </div>
-        </form>
+        </header>
+        <main class="flex-grow container mx-auto p-4 lg:p-6 max-w-6xl">
+            <!-- Promotional Banner -->
+            <section class="promo-banner p-6 md:p-8 flex flex-col justify-center items-start mb-6 rounded-xl">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2 leading-tight text-gray-900">Compare Grocery <br> Prices in Seconds</h2>
+                <p class="text-sm md:text-base mb-4 text-gray-900">All top platforms in a simple view</p>
+                <button class="bg-white text-teal-600 font-semibold py-2 px-6 rounded-full shadow-md hover:bg-gray-100 transition-colors duration-300" onclick="testButtonClick()">
+                    Explore Now
+                </button>
+            </section>
 
-        <!-- Student List Cards -->
-        <div id="studentCardsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- Student cards will be inserted here by JavaScript -->
-            <p id="loadingMessage" class="col-span-full text-center text-gray-500">Loading students...</p>
+            <!-- Category Icons Section -->
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-6">Shop by Category</h2>
+            <section class="flex overflow-x-auto pb-4 space-x-4 hide-scrollbar">
+                <!-- Hide scrollbar for aesthetic, but allow scrolling -->
+                <style>
+                    .hide-scrollbar::-webkit-scrollbar {
+                        display: none;
+                    }
+                    .hide-scrollbar {
+                        -ms-overflow-style: none;  /* IE and Edge */
+                        scrollbar-width: none;  /* Firefox */
+                    }
+                </style>
+                <div class="category-icon-item" onclick="filterByCategory('all')">
+                    <i class="fas fa-grip-horizontal"></i>
+                    <span>All</span>
+                </div>
+                <div class="category-icon-item" onclick="filterByCategory('fruits')">
+                    <i class="fas fa-apple-alt"></i>
+                    <span>Fruits</span>
+                </div>
+                <div class="category-icon-item" onclick="filterByCategory('vegetables')">
+                    <i class="fas fa-carrot"></i>
+                    <span>Vegetables</span>
+                </div>
+                <div class="category-icon-item" onclick="filterByCategory('bakery')">
+                    <i class="fas fa-bread-slice"></i>
+                    <span>Bakery</span>
+                </div>
+                <div class="category-icon-item" onclick="filterByCategory('packaged food')">
+                    <i class="fas fa-box-open"></i>
+                    <span>Packaged Food</span>
+                </div>
+                <div class="category-icon-item" onclick="filterByCategory('drinks')">
+                    <i class="fas fa-beer"></i>
+                    <span>Drinks</span>
+                </div>
+                <div class="category-icon-item" onclick="filterByCategory('meat')">
+                    <i class="fas fa-drumstick-bite"></i>
+                    <span>Meat</span>
+                </div>
+            </section>
+
+            <!-- "Save Big on These" Section - This will now act as a general "all products" section -->
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left" data-section-heading="Save Big on These">Save Big on These</h2>
+            <!-- This section will contain all products when "All" is selected or on initial load -->
+            <section class="product-grid-container" data-section-category="all-products-display">
+                <!-- All product cards will be dynamically managed here by JS for 'all' view -->
+            </section>
+
+
+            <!-- Drink & Beer Section -->
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Drinks">ភេសជ្ជៈ</h2>
+            <section class="product-grid-container hidden-section" data-section-category="drinks">
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFJpyvrfIXJN7qZkF8ooO5AWb0IfSDHs5Vhg&s" alt="Passion Fruit Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Passion Fruit Drink</h3>
+                    <p class="text-gray-600 mb-4">ភេសជ្ជៈផ្លែផាសសិន បំពេញជាតិស្ករ និងផ្លែពោរពេញដោយក្ដារផ្លែ វិធីផ្សំច្រើនប្រភេទ៖ canned juice, sparkling water mix។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.40 </span>
+                    <button onclick="openAbaKhqrModal('1.40', 'Passion Fruit Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញពេលនេះ
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition duration-300">
+                    <img src="https://content-prod-live.cert.starbucks.com/binary/v2/asset/137-98075.jpg" alt="Cold Brew Coffee" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Cold Brew Coffee</h3>
+                    <p class="text-gray-600 mb-4">កាហ្វេត្រជាក់ (cold brew) 100% Arabica, មាន caffeine 150‑200 mg ក្នុងកែវ 355 ml។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$2.99</span>
+                    <button onclick="openAbaKhqrModal('2.99', 'Cold Brew Coffee')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញពេលនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://www.starbucks.co.nz/content/menu/0591483001647828269.jpg" alt="POKKA Green Tea" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2"> Green Tea </h3>
+                    <p class="text-gray-600 mb-4">តែបៃតងជំពាក់តិចស្ករ (~1.2 $), គ្រប់លក្ខណៈ ៣៦០ ml, បានលក់នៅកម្ពុជា</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.20</span>
+                    <button onclick="openAbaKhqrModal('1.20', 'Green Tea')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញពេលនេះ
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://cdn.s-liquor.com.kh/sliquors3/wp-content/uploads/2020/07/Carabao.jpg?strip=all&lossy=1&webp=85&avif=80&ssl=1" alt="Carabao Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Carabao Energy Drink</h3>
+                    <p class="text-gray-600 mb-4">ភេសជ្ជៈថាមពលនាំមកពីថៃ មាន 106 mg caffeine ក្នុង can 330 ml និង 15 g ស្ករ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65 </span>
+                    <button onclick="openAbaKhqrModal('0.65', 'Carabao Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញពេលនេះ
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://www.monde-selection.com/wp-content/uploads/2023/06/1040397.png" alt="Boostrong Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Boostrong Energy Drink</h3>
+                    <p class="text-gray-600 mb-4">ភេសជ្ជៈថាមពលខ្មែរ ពោរពេញដោយ B‑vitamins, taurine និង caffeine សម្រាប់ផ្តល់ថាមពលខ្លាំង។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65 </span>
+                    <button onclick="openAbaKhqrModal('0.65', 'Boostrong Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញពេលនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://www.monde-selection.com/wp-content/uploads/2023/04/1039137.png" alt="Ize Cola" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Ize Cola</h3>
+                    <p class="text-gray-600 mb-4">ភេសជ្ជៈកូឡាជាតិខ្មែរ មានជាតិស្ករច្រើនទាប  និង caffeine បញ្ចូលក្នុង carbonated water។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.50</span>
+                    <button onclick="openAbaKhqrModal('0.50', 'Ize Cola')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញពេលនេះ
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://s3.ap-southeast-1.wasabisys.com/sliquors3/wp-content/uploads/2020/07/Red-Bull-250ml-01.png" alt="Red Bull Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Red Bull Energy Drink</h3>
+                    <p class="text-gray-600 mb-4">ភេសជ្ជៈថាមពលទ្រង់ទ្រាយម៉ុសខេត្តស្ករនិងដែកសារធាតុ B‑vitamins ទឹកកក និង taurine។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65</span>
+                    <button onclick="openAbaKhqrModal('0.65', 'Red Bull Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://www.championgroup.com.kh/wp-content/uploads/2025/05/champion-Green-768x768.png" alt="Champion Green Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Champion Green Energy Drink</h3>
+                    <p class="text-gray-600 mb-4">ភេសជ្ជៈថាមពលបៃតងថ្មីពី Champion Group ប្រើបច្ចេកវិទ្យាជាតិក្រុមសហព័ន្ធអ៊ឺរ៉ុប។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65</span>
+                    <button onclick="openAbaKhqrModal('0.65', 'Champion Green Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://cdn.s-liquor.com.kh/sliquors3/wp-content/uploads/2022/11/Sting.jpg?strip=all&lossy=1&webp=85&avif=80&ssl=1" alt="Sting Red (Strawberry)" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Sting Red (Strawberry)</h3>
+                    <p class="text-gray-600 mb-4">ភេសជ្ជៈថាមពលរសជាតិស្ត្របឺរី មាន caffeine ប្រហែល 72 mg/250 ml និងត្រាំតែមធ្យម។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65</span>
+                    <button onclick="openAbaKhqrModal('0.65', 'Sting Red (Strawberry)')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMuzYGVMn8fyIBX20noPAtO_v0cuFYks0P5A&sg" alt="Wurkz Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Wurkz Energy Drink</h3>
+                    <p class="text-gray-600 mb-4">ផលិតផលមីណ្ឌមកពីកម្ពុជាដែលបានទទួល Gold និង Silver Award ពី Monde Selection ជាមួយ B‑vitamins ទាំងឡាយ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65</span>
+                    <button onclick="openAbaKhqrModal('0.65', 'Wurkz Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://www.monde-selection.com/wp-content/uploads/2023/04/1039997.png" alt="Krud Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Krud Energy Drink</h3>
+                    <p class="text-gray-600 mb-4">ស្រស់ប្លែក និងផ្តល់ថាមពលបរិច្ច័យ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65</span>
+                    <button onclick="openAbaKhqrModal('0.65', 'Krud Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញពេលនេះ
+                    </button>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://www.drgcambodia.com/wp-content/uploads/2021/11/vigor-power-energy-drink-cambodia.jpg" alt="Vigor Power Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Vigor Power Energy Drink</h3>
+                    <p class="text-gray-600 mb-4">ផ្ដល់ថាមពលលឿន និងសារ៉ាប់សារ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65 </span>
+                    <button onclick="openAbaKhqrModal('0.65', 'Vigor Power Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញពេលនេះ
+                    </button>
+                </div>
+            </section>
+
+            <!-- Vegetables Section -->
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Vegetables">បន្លែ</h2>
+            <section class="product-grid-container hidden-section" data-section-category="vegetables">
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd_IjOiPxkpz-0V9UCzKmAZae1EFiGsYd5RA&s" alt="Broccoli" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ផ្កាខាត់ណាខៀវស្រស់</h3>
+                    <p class="text-gray-600 mb-4">ផ្កាខាត់ណាខៀវក្នុងស្រុក សរីរាង្គ ល្អសម្រាប់ចំហុយ ឬឆា។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$3.99 / kg</span>
+                    <button onclick="openAbaKhqrModal('3.99', 'Broccoli')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://5.imimg.com/data5/EX/PC/MY-51545753/selection_587.png" alt="Carrots" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ការ៉ុតស្រស់</h3>
+                    <p class="text-gray-600 mb-4">ការ៉ុតផ្អែម និងស្រួយ ល្អឥតខ្ចោះសម្រាប់ញ៉ាំ ឬចម្អិន។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.50 / kg</span>
+                    <button onclick="openAbaKhqrModal('1.50', 'Carrots')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://cdn.shopify.com/s/files/1/0824/4857/files/spinach_large.jpg?v=1490961229" alt="Spinach" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ស្ពៃខ្មៅសរីរាង្គ</h3>
+                    <p class="text-gray-600 mb-4">ស្លឹកស្ពៃខ្មៅស្រស់ សម្បូរជីវជាតិសម្រាប់សាឡាដ និងអាហាររបស់អ្នក។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.50 / bunch</span>
+                    <button onclick="openAbaKhqrModal('0.50', 'Spinach')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://bjs.scene7.com/is/image/bjs/15571?$bjs-Initial600$" alt="Cabbage" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ស្ពៃក្តោប</h3>
+                    <p class="text-gray-600 mb-4">ស្ពៃក្តោបស្រស់ និងមានប្រយោជsន៍ ល្អឥតខ្ចោះសម្រាប់ coleslaw ឬឆា។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.50 / head</span>
+                    <button onclick="openAbaKhqrModal('1.50', 'Cabbage')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://www.tasteofhome.com/wp-content/uploads/2019/07/Chinese-eggplant-shutterstock_2033421.jpg" alt="Eggplant" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ត្រប់</h3>
+                    <p class="text-gray-600 mb-4">ត្រប់ទន់ និងមានរសជាតិឆ្ងាញ់ ល្អសម្រាប់ដុត ឬដុតនំ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.75 / kg</span>
+                    <button onclick="openAbaKhqrModal('1.75', 'Eggplant')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://www.telegraph.co.uk/content/dam/briefs/2025/04/30/TELEMMGLPICT000421134667_17460223214200_trans_NvBQzQNjv4BqNJ-LQvq2P5DIswYl2XeNFI064TIrcX_7tT0sGCZw0_A.jpeg?imwidth=640" alt="Potato" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ដំឡូងបារាំង</h3>
+                    <p class="text-gray-600 mb-4">ដំឡូងបារាំងចម្រុះ ល្អឥតខ្ចោះសម្រាប់បុក ដុតនំ ឬចៀន។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$3.50 / kg</span>
+                    <button onclick="openAbaKhqrModal('3.50', 'Potato')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://seedsofplenty.com.au/cdn/shop/products/V-OTH-01p1_grande.jpg?v=1670214705" alt="Parsnip" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ឆៃផាវ</h3>
+                    <p class="text-gray-600 mb-4">ផាសនីបផ្អែម និងមានរសជាតិដី ល្អសម្រាប់អាំង ឬស្ងោរ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$2.20 / kg</span>
+                    <button onclick="openAbaKhqrModal('2.20', 'Parsnip')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://s5.kh1.co/d7/d7d4cea66e93c6dd2f1b16e79ead46b2542950d8.jpg" alt="Ginger" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ខ្ញី</h3>
+                    <p class="text-gray-600 mb-4">ខ្ញីស្រស់ មានរសជាតិហឹរឆ្ងាញ់ សម្រាប់ធ្វើម្ហូប ឬតែ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.70 / 100g</span>
+                    <button onclick="openAbaKhqrModal('0.70', 'Ginger')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxzUlrfnxSrwA6e3ksStmeEN7b3RIoWjRxyw&s" alt="Bell Pepper" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ម្ទេសប្លោក</h3>
+                    <p class="text-gray-600 mb-4">ម្ទេសប្លោកស្រស់ ពណ៌ស្រស់ឆើតឆាយ និងមានរសជាតិផ្អែម ល្អសម្រាប់សាឡាដ ឬឆា។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.20 / kg</span>
+                    <button onclick="openAbaKhqrModal('1.20', 'Bell Pepper')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR18JdTa_4vi7dPnqWqzLXGblBsUtN-6oIrEA&s" alt="Onion" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ខ្ទឹមបារាំង</h3>
+                    <p class="text-gray-600 mb-4">ខ្ទឹមបារាំងស្រស់ សម្រាប់បន្ថែមរសជាតិដល់មុខម្ហូបរបស់អ្នក។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.00 / kg</span>
+                    <button onclick="openAbaKhqrModal('1.00', 'Onion')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://aeoncambodia.sgp1.digitaloceanspaces.com/image/products/20241224/1735019386-14339.jpg" alt="Garlic" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ខ្ទឹមស</h3>
+                    <p class="text-gray-600 mb-4">ខ្ទឹមសស្រស់ សម្រាប់បន្ថែមរសជាតិឈ្ងុយឆ្ងាញ់ដល់មុខម្ហូបរបស់អ្នក។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.80 / 100g</span>
+                    <button onclick="openAbaKhqrModal('0.80', 'Garlic')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF6uTMq8LogqEYRCZFal-XUqjGLbdP6IAtDA&s" alt="Lettuce" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">សាឡាដ</h3>
+                    <p class="text-gray-600 mb-4">សាឡាដស្រស់ សម្រាប់ធ្វើសាឡាដ ឬប៊ឺហ្គឺ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.75 / head</span>
+                    <button onclick="openAbaKhqrModal('0.75', 'Lettuce')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+            </section>
+
+            <!-- Meat Section -->
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Meat">សាច់</h2>
+            <section class="product-grid-container hidden-section" data-section-category="meat">
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://images.khmer24.co/profiles/pictures/21-04-27/p70161608136253_561420_1619498195_95.jpg" alt="Chicken Breast" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">សាច់មាន់</h3>
+                    <p class="text-gray-600 mb-4">សាច់មាន់ស្រស់ សម្រាប់ធ្វើម្ហូបជាច្រើនប្រភេទ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$5.50 / kg</span>
+                    <button onclick="openAbaKhqrModal('5.50', 'Chicken Breast')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://niront.com/cdn/shop/files/product-350123.jpg?v=1723222656" alt="Beef Steak" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">សាច់គោ</h3>
+                    <p class="text-gray-600 mb-4">សាច់គោស្រស់ សម្រាប់អាំង ឬបំពង។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$12.00 / kg</span>
+                    <button onclick="openAbaKhqrModal('12.00', 'Beef Steak')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3NqMls-O0Co7j8a7UBJGMRhp_tqIthXn3Fg&s" alt="Salmon Fillet" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ត្រីសាលម៉ុន</h3>
+                    <p class="text-gray-600 mb-4">ត្រីសាលម៉ុនស្រស់ សម្បូរបែបដោយ Omega-3 ល្អសម្រាប់សុខភាព។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$15.00 / kg</span>
+                    <button onclick="openAbaKhqrModal('15.00', 'Salmon Fillet')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://camhappymart.com/storage/app/public/product/2023-01-13-63c0d2dba7d0b.png" alt="Pork Loin" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">សាច់ជ្រូក</h3>
+                    <p class="text-gray-600 mb-4">សាច់ជ្រូកស្រស់ សម្រាប់ធ្វើម្ហូបផ្សេងៗ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$5.50 / kg</span>
+                    <button onclick="openAbaKhqrModal('5.50', 'Pork Loin')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="w-full bg-gray-100 text-gray-600 p-4 text-center mt-8 shadow-inner">
+            <p>&copy; 2025 MiNi 7 Market. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
+            <div class="flex justify-center space-x-6 mt-4">
+                <!-- Facebook Icon (SVG for better scaling and styling) -->
+                <a href="https://www.facebook.com/share/1BqpiWyLDX/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-blue-500 transition-colors duration-300">
+                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                <!-- Telegram Icon (SVG) -->
+                <a href="https://t.me/Dy_kilkilo" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-blue-500 transition-colors duration-300">
+                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.305 7.785l-1.956 9.22c-.183.86-.693 1.056-1.402.668l-3.07-2.288-1.487 1.437c-.309.299-.53.51-.904.51l.114-3.022 5.538-5.064c.24-.22.45-.44.205-.66-.24-.22-.605-.055-.845.165l-6.07 4.71-2.92-1.025c-.85-.298-.86-.85-.175-1.11L15.93 7.23c.7-.27 1.3.17 1.075.855z"/>
+                    </svg>
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ABA KHQR Modal -->
+    <div id="abaKhqrModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-button" onclick="closeAbaKhqrModal()">&times;</button>
+            <div class="aba-khqr-header">ABA KHQR</div>
+            <div class="aba-khqr-info">
+                <p><strong>ផលិតផល:</strong> <span id="khqrProductName"></span></p>
+                <p><strong>ឈ្មោះគណនី:</strong> MiNi 7 Market</p>
+                <p><strong>លេខគណនី:</strong> 00123456789</p>
+            </div>
+            <div class="aba-khqr-amount" id="abaKhqrAmountDisplay"></div>
+            <div class="aba-khqr-qr-container">
+                <img src="photo_2025-07-18_09-39-13.jpg" alt="ABA KHQR Code"> <!-- Updated QR code image -->
+            </div>
+            <div class="aba-khqr-instructions">
+                <p>សូមស្កេន QR Code នេះដើម្បីបង់ប្រាក់។</p>
+                <p>បន្ទាប់ពីបង់ប្រាក់រួច សូមចុចប៊ូតុង "បោះពុម្ព" ដើម្បីបោះពុម្ពវិក្កយបត្រ។</p>
+            </div>
+            <button class="aba-khqr-print-button" onclick="printReceipt()">បោះពុម្ព</button>
         </div>
     </div>
 
-    <script type="module">
-        // Firebase imports
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <script>
+        let currentProductPrice = 0;
+        let currentProductName = '';
 
-        // Global variables for Firebase (provided by Canvas environment)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOM fully loaded and parsed.");
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+            // Get references to elements
+            const searchInput = document.getElementById('search-input');
+            const searchButton = document.getElementById('search-button');
+            const allProductSections = document.querySelectorAll('main .product-grid-container'); // Select all product grid sections
+            const allSectionHeadings = document.querySelectorAll('main h2[data-section-heading]'); // Select all h2 headings with data-section-heading
+            const promoBanner = document.querySelector('.promo-banner'); // Reference to the promotional banner
 
-        let currentUserId = null;
-        let isAuthReady = false;
+            // Store all product cards for the "All" view
+            const allProductsContainer = document.querySelector('section[data-section-category="all-products-display"]');
+            const initialProductCards = [];
 
-        // Get references to the form and the container for student cards
-        const studentForm = document.getElementById('studentForm');
-        const studentCardsContainer = document.getElementById('studentCardsContainer');
-        const userIdDisplay = document.getElementById('userIdDisplay');
-        const loadingMessage = document.getElementById('loadingMessage');
+            // IMPORTANT: Create a map to store product cards by their intended category.
+            // This allows us to easily retrieve and display them for specific categories.
+            const categorizedProductCards = {
+                'drinks': [],
+                'vegetables': [],
+                'meat': [],
+                // Add other categories as needed
+            };
 
-        // Function to generate a placeholder image URL
-        function getPlaceholderImage(name) {
-            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
-            const colors = ['4F46E5', 'EC4899', '10B981', 'F59E0B', '6366F1', 'EF4444']; // Different background colors
-            const textColor = 'FFFFFF'; // White text
-            const hash = initials.charCodeAt(0) + initials.charCodeAt(initials.length - 1);
-            const color = colors[hash % colors.length];
-            return `https://placehold.co/100x100/${color}/${textColor}?text=${initials}`;
-        }
-
-        // Function to create a student card element
-        function createStudentCard(studentData, docId) {
-            const studentCard = document.createElement('div');
-            studentCard.classList.add(
-                'bg-white', 'rounded-xl', 'shadow-md', 'p-6', 'flex', 'flex-col', 'items-center',
-                'text-center', 'transform', 'hover:scale-105', 'transition', 'duration-300', 'ease-in-out',
-                'border', 'border-gray-200'
-            );
-            studentCard.dataset.docId = docId; // Store Firestore document ID
-
-            const img = document.createElement('img');
-            img.src = getPlaceholderImage(studentData.name);
-            img.alt = studentData.name;
-            img.classList.add('w-24', 'h-24', 'rounded-full', 'object-cover', 'mb-4', 'border-4', 'border-blue-200');
-            studentCard.appendChild(img);
-
-            const nameElement = document.createElement('h3');
-            nameElement.classList.add('text-xl', 'font-semibold', 'text-gray-900', 'mb-2');
-            nameElement.textContent = studentData.name;
-            studentCard.appendChild(nameElement);
-
-            const majorElement = document.createElement('p');
-            majorElement.classList.add('text-gray-700', 'text-sm', 'mb-1');
-            majorElement.textContent = `Major: ${studentData.major}`;
-            studentCard.appendChild(majorElement);
-
-            const yearElement = document.createElement('p');
-            yearElement.classList.add('text-gray-700', 'text-sm', 'mb-1');
-            yearElement.textContent = `Year: ${studentData.year}`;
-            studentCard.appendChild(yearElement);
-
-            const phoneElement = document.createElement('p');
-            phoneElement.classList.add('text-gray-700', 'text-sm', 'mb-4');
-            phoneElement.textContent = `Phone: ${studentData.phone}`;
-            studentCard.appendChild(phoneElement);
-
-            const likeButton = document.createElement('button');
-            likeButton.classList.add(
-                'like-button', 'flex', 'items-center', 'justify-center', 'p-2', 'rounded-full',
-                'bg-gray-100', 'hover:bg-gray-200', 'focus:outline-none', 'focus:ring-2', 'focus:ring-red-400',
-                'transition', 'duration-200', 'ease-in-out'
-            );
-            // Set initial liked state based on data
-            if (studentData.liked) {
-                likeButton.classList.add('liked');
-            }
-            likeButton.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart text-gray-400">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                </svg>
-            `;
-            likeButton.addEventListener('click', async function() {
-                // Toggle the liked state in Firestore
-                const newLikedState = !studentCard.classList.contains('liked');
-                likeButton.classList.toggle('liked', newLikedState); // Visually update immediately
-                try {
-                    const studentDocRef = doc(db, `artifacts/${appId}/public/data/students`, docId);
-                    await updateDoc(studentDocRef, { liked: newLikedState });
-                    console.log(`Student ${docId} liked state updated to ${newLikedState}`);
-                } catch (error) {
-                    console.error("Error updating liked state:", error);
-                    // Revert visual state if update fails
-                    likeButton.classList.toggle('liked', !newLikedState);
-                }
-            });
-            studentCard.appendChild(likeButton);
-
-            return studentCard;
-        }
-
-        // Authentication State Listener
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                currentUserId = user.uid;
-                userIdDisplay.textContent = currentUserId;
-                isAuthReady = true;
-                console.log("Firebase authenticated. User ID:", currentUserId);
-                // Start listening for student data after authentication
-                listenForStudentData();
-            } else {
-                // Sign in anonymously if no user is authenticated
-                try {
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                        console.log("Signed in with custom token.");
-                    } else {
-                        await signInAnonymously(auth);
-                        console.log("Signed in anonymously.");
-                    }
-                } catch (error) {
-                    console.error("Error during authentication:", error);
-                    userIdDisplay.textContent = "Authentication failed.";
-                    loadingMessage.textContent = "Failed to load student data. Please try again.";
-                }
-            }
-        });
-
-        // Listen for student data changes in Firestore
-        function listenForStudentData() {
-            if (!isAuthReady) {
-                console.warn("Authentication not ready. Cannot listen for data.");
-                return;
-            }
-
-            const studentsCollectionRef = collection(db, `artifacts/${appId}/public/data/students`);
-            const q = query(studentsCollectionRef);
-
-            onSnapshot(q, (snapshot) => {
-                loadingMessage.style.display = 'none'; // Hide loading message once data starts coming
-                studentCardsContainer.innerHTML = ''; // Clear existing cards
-                if (snapshot.empty) {
-                    studentCardsContainer.innerHTML = '<p class="col-span-full text-center text-gray-500">No students added yet.</p>';
-                } else {
-                    snapshot.forEach((doc) => {
-                        const studentData = doc.data();
-                        const docId = doc.id;
-                        const card = createStudentCard(studentData, docId);
-                        studentCardsContainer.appendChild(card);
+            // Populate initialProductCards and categorizedProductCards
+            allProductSections.forEach(section => {
+                // Only process sections that are NOT the 'all-products-display' placeholder
+                if (section.dataset.sectionCategory !== 'all-products-display') {
+                    const category = section.dataset.sectionCategory;
+                    Array.from(section.children).forEach(productCard => {
+                        initialProductCards.push(productCard); // Add to overall list
+                        if (categorizedProductCards[category]) {
+                            categorizedProductCards[category].push(productCard); // Add to specific category list
+                        }
                     });
+                    section.innerHTML = ''; // Clear content from original sections after storing
                 }
-            }, (error) => {
-                console.error("Error fetching student data:", error);
-                loadingMessage.textContent = "Error loading student data.";
             });
-        }
 
-
-        // Add event listener for form submission
-        studentForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-
-            if (!isAuthReady || !currentUserId) {
-                console.warn("Authentication not ready. Cannot add student.");
-                // Using a custom modal or message box instead of alert() for better UX
-                const messageBox = document.createElement('div');
-                messageBox.classList.add('fixed', 'inset-0', 'bg-gray-600', 'bg-opacity-50', 'flex', 'items-center', 'justify-center', 'z-50');
-                messageBox.innerHTML = `
-                    <div class="bg-white p-6 rounded-lg shadow-xl text-center">
-                        <p class="text-lg font-semibold mb-4">Please wait for authentication to complete before adding a student.</p>
-                        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg" onclick="this.parentNode.parentNode.remove()">OK</button>
-                    </div>
-                `;
-                document.body.appendChild(messageBox);
-                return;
+            // Event listener for the search button
+            if (searchButton) {
+                searchButton.addEventListener('click', performSearch);
             }
 
-            const name = document.getElementById('studentName').value;
-            const major = document.getElementById('studentMajor').value;
-            const year = parseInt(document.getElementById('studentYear').value);
-            const phone = document.getElementById('studentPhone').value;
-
-            try {
-                // Add a new document to the 'students' collection
-                const docRef = await addDoc(collection(db, `artifacts/${appId}/public/data/students`), {
-                    name: name,
-                    major: major,
-                    year: year,
-                    phone: phone,
-                    liked: false, // Initial liked state
-                    createdAt: new Date() // Timestamp for ordering
+            // Event listener for Enter key in search input
+            if (searchInput) {
+                searchInput.addEventListener('keypress', (event) => {
+                    if (event.key === 'Enter') {
+                        performSearch();
+                    }
                 });
-                console.log("Document written with ID: ", docRef.id);
-                studentForm.reset(); // Clear the form fields
-            } catch (e) {
-                console.error("Error adding document: ", e);
-                // In a real app, you'd show a user-friendly error message
-                const messageBox = document.createElement('div');
-                messageBox.classList.add('fixed', 'inset-0', 'bg-gray-600', 'bg-opacity-50', 'flex', 'items-center', 'justify-center', 'z-50');
-                messageBox.innerHTML = `
-                    <div class="bg-white p-6 rounded-lg shadow-xl text-center">
-                        <p class="text-lg font-semibold mb-4">Failed to add student. Please try again.</p>
-                        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg" onclick="this.parentNode.parentNode.remove()">OK</button>
-                    </div>
-                `;
-                document.body.appendChild(messageBox);
             }
-        });
+
+            // Function to show all content (for "All" category button or clearing search)
+            window.showAllContent = function() {
+                console.log("Showing all content.");
+                // Hide all specific category sections and their headings
+                allProductSections.forEach(section => {
+                    section.classList.add('hidden-section');
+                });
+                allSectionHeadings.forEach(heading => {
+                    heading.classList.add('hidden-section');
+                });
+
+                // Show the "Save Big on These" heading
+                document.querySelector('h2[data-section-heading="Save Big on These"]').classList.remove('hidden-section');
+
+                // Populate and show the 'all-products-display' section
+                allProductsContainer.innerHTML = ''; // Clear previous content
+                initialProductCards.forEach(card => {
+                    card.style.display = 'flex'; // Ensure product card is visible
+                    allProductsContainer.appendChild(card);
+                });
+                allProductsContainer.classList.remove('hidden-section');
+
+
+                // Ensure the promo banner is visible
+                if (promoBanner) {
+                    promoBanner.classList.remove('hidden-section');
+                }
+                // Clear search input
+                if (searchInput) {
+                    searchInput.value = '';
+                }
+            };
+
+            // Function to filter products by category
+            window.filterByCategory = function(category) {
+                console.log("Filtering by category:", category);
+                const query = category.toLowerCase();
+
+                // Hide promo banner
+                if (promoBanner) {
+                    promoBanner.classList.add('hidden-section');
+                }
+
+                // Hide all product sections and their headings first
+                allProductSections.forEach(section => {
+                    section.classList.add('hidden-section');
+                    // Ensure all products within hidden sections are displayed as flex (for when they become visible again)
+                    section.querySelectorAll('.bg-white.p-6').forEach(product => {
+                        product.style.display = 'flex';
+                    });
+                });
+                allSectionHeadings.forEach(heading => {
+                    heading.classList.add('hidden-section');
+                });
+
+                if (query === 'all') {
+                    showAllContent(); // Use the showAllContent function for 'all'
+                    return;
+                }
+
+                // Find the target section and heading
+                const targetSection = document.querySelector(`section[data-section-category="${query}"]`);
+                // Adjust heading text to match the Khmer text if needed, or use a data attribute
+                let targetHeadingText = category.charAt(0).toUpperCase() + category.slice(1);
+                if (query === 'drinks') targetHeadingText = 'ភេសជ្ជៈ';
+                if (query === 'vegetables') targetHeadingText = 'បន្លែ';
+                if (query === 'meat') targetHeadingText = 'សាច់';
+                // Add more mappings if other category headings are in Khmer
+
+                const targetHeading = document.querySelector(`h2[data-section-heading="${targetHeadingText}"]`);
+
+                if (targetSection) {
+                    targetSection.innerHTML = ''; // Clear content before re-populating
+                    if (categorizedProductCards[query]) {
+                        categorizedProductCards[query].forEach(card => {
+                            targetSection.appendChild(card); // Append the stored product cards
+                        });
+                    }
+                    targetSection.classList.remove('hidden-section');
+                }
+                if (targetHeading) {
+                    targetHeading.classList.remove('hidden-section');
+                }
+
+                // Hide the "Save Big on These" heading when a specific category is selected
+                document.querySelector('h2[data-section-heading="Save Big on These"]').classList.add('hidden-section');
+            };
+
+            // Function to handle the "Explore Now" button click (for demonstration)
+            window.testButtonClick = function() {
+                console.log("Explore Now button clicked - This would typically trigger a search or scroll.");
+                // For now, it just scrolls to the first product grid (which is now the 'all-products-display' section)
+                const firstProductGrid = document.querySelector('section[data-section-category="all-products-display"]');
+                if (firstProductGrid) {
+                    firstProductGrid.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+
+            // Function to open the ABA KHQR modal directly
+            window.openAbaKhqrModal = function(price, productName) {
+                currentProductPrice = parseFloat(price);
+                currentProductName = productName;
+                document.getElementById('khqrProductName').textContent = productName; // Display product name in KHQR modal
+                document.getElementById('abaKhqrAmountDisplay').textContent = `$${currentProductPrice.toFixed(2)}`;
+                document.getElementById('abaKhqrModal').classList.add('show');
+                console.log(`Opening ABA KHQR modal for ${productName} with amount $${currentProductPrice.toFixed(2)}`);
+            };
+
+            // Function to close the ABA KHQR modal
+            window.closeAbaKhqrModal = function() {
+                document.getElementById('abaKhqrModal').classList.remove('show');
+                console.log("ABA KHQR modal closed.");
+            };
+
+            // Function to print the receipt
+            window.printReceipt = function() {
+                window.print();
+                console.log("Printing receipt.");
+            };
+
+            // Function to perform the search
+            function performSearch() {
+                const query = searchInput.value.toLowerCase();
+                console.log("Performing search for:", query);
+
+                // Hide promo banner
+                if (promoBanner) {
+                    promoBanner.classList.add('hidden-section');
+                }
+
+                // Hide all product sections and their headings initially for search
+                allProductSections.forEach(section => {
+                    section.classList.add('hidden-section');
+                });
+                allSectionHeadings.forEach(heading => {
+                    heading.classList.add('hidden-section');
+                });
+
+                // Show the "Save Big on These" heading for search results
+                document.querySelector('h2[data-section-heading="Save Big on These"]').classList.remove('hidden-section');
+                allProductsContainer.classList.remove('hidden-section'); // Ensure the main container is visible
+
+                let anyProductMatchesInTotal = false;
+
+                // Iterate through all initial product cards to filter
+                allProductsContainer.innerHTML = ''; // Clear content before adding filtered products
+
+                initialProductCards.forEach(product => {
+                    const productName = product.querySelector('h3').textContent.toLowerCase();
+                    const productDescription = product.querySelector('p').textContent.toLowerCase();
+
+                    if (productName.includes(query) || productDescription.includes(query)) {
+                        product.style.display = 'flex'; // Ensure product card is visible
+                        allProductsContainer.appendChild(product); // Add to the main display container
+                        anyProductMatchesInTotal = true;
+                    } else {
+                        product.style.display = 'none'; // Hide product
+                    }
+                });
+
+                if (!anyProductMatchesInTotal) {
+                    // Optionally display a "No results found" message
+                    allProductsContainer.innerHTML = '<p class="text-center text-gray-500 text-lg mt-8">No products found matching your search.</p>';
+                }
+
+                console.log("Content: Search performed for query:", query);
+            }
+
+            // Initially show all content on page load
+            showAllContent();
+
+            console.log("Script initialization complete.");
+        }); // End of DOMContentLoaded
     </script>
 </body>
 </html>
