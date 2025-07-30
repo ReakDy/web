@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MiNi 7 Market</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for icons (search, filter, category icons) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -219,34 +216,29 @@
     <div id="main-content">
         <header class="w-full bg-white p-4 shadow-sm">
             <div class="flex items-center justify-between max-w-6xl mx-auto">
-                <!-- Logo -->
                 <div class="flex items-center space-x-2">
-                    <img src="image_d06143.png" alt="MiNi 7 Market Logo" class="h-10 w-auto rounded-full">
+                    <img src="photo_2025-07-09_07-19-46.jpg" alt="MiNi 7 Market Logo" class="h-10 w-auto rounded-full">
                     <div class="flex items-center text-gray-700 text-sm">
                         <i class="fas fa-map-marker-alt mr-1 text-red-500"></i>
                         <span>Jaipur, Rajasthan</span>
                         <i class="fas fa-chevron-down ml-1 text-gray-500 text-xs"></i>
                     </div>
                 </div>
-                <!-- Settings Icon -->
                 <div class="text-gray-600 text-2xl cursor-pointer">
                     <i class="fas fa-cog"></i>
                 </div>
             </div>
 
-            <!-- Search Bar -->
             <div class="mt-4 flex items-center justify-center max-w-6xl mx-auto px-2">
                 <div class="relative flex-grow">
                     <input type="text" id="search-input" placeholder="Search" class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-400 text-gray-700 text-lg">
                     <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                 </div>
                 <button id="search-button" class="ml-3 p-3 bg-teal-500 hover:bg-teal-600 text-white rounded-xl transition-colors duration-300 shadow-md">
-                    <i class="fas fa-sliders-h text-xl"></i> <!-- Filter icon -->
-                </button>
+                    <i class="fas fa-sliders-h text-xl"></i> </button>
             </div>
         </header>
         <main class="flex-grow container mx-auto p-4 lg:p-6 max-w-6xl">
-            <!-- Promotional Banner -->
             <section class="promo-banner p-6 md:p-8 flex flex-col justify-center items-start mb-6 rounded-xl">
                 <h2 class="text-2xl md:text-3xl font-bold mb-2 leading-tight text-gray-900">Compare Grocery <br> Prices in Seconds</h2>
                 <p class="text-sm md:text-base mb-4 text-gray-900">All top platforms in a simple view</p>
@@ -255,10 +247,8 @@
                 </button>
             </section>
 
-            <!-- Category Icons Section -->
             <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-6">Shop by Category</h2>
             <section class="flex overflow-x-auto pb-4 space-x-4 hide-scrollbar">
-                <!-- Hide scrollbar for aesthetic, but allow scrolling -->
                 <style>
                     .hide-scrollbar::-webkit-scrollbar {
                         display: none;
@@ -298,15 +288,11 @@
                 </div>
             </section>
 
-            <!-- "Save Big on These" Section - This will now act as a general "all products" section -->
             <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left" data-section-heading="Save Big on These">Save Big on These</h2>
-            <!-- This section will contain all products when "All" is selected or on initial load -->
             <section class="product-grid-container" data-section-category="all-products-display">
-                <!-- All product cards will be dynamically managed here by JS for 'all' view -->
-            </section>
+                </section>
 
 
-            <!-- Drink & Beer Section -->
             <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Drinks">ភេសជ្ជៈ</h2>
             <section class="product-grid-container hidden-section" data-section-category="drinks">
                 <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
@@ -427,7 +413,135 @@
                 </div>
             </section>
 
-            <!-- Vegetables Section -->
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Fruits">ផ្លែឈើ</h2>
+            <section class="product-grid-container hidden-section" data-section-category="fruits">
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://newindiansupermarket.com/cdn/shop/products/APPLE-RED.jpg?v=1739257722&width=1500" alt="Red Apple" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ផ្លែប៉ោមក្រហម</h3>
+                    <p class="text-gray-600 mb-4">ផ្លែប៉ោមស្រស់ ផ្អែមឆ្ងាញ់ ពោរពេញដោយវីតាមីន។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$2.50 / kg</span>
+                    <button onclick="openAbaKhqrModal('2.50', 'Red Apple')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://www.rainforest-alliance.org/wp-content/uploads/2021/06/bananas-1-e1624909301641.jpg.optimal.jpg" alt="Banana" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ចេកណាំវ៉ា</h3>
+                    <p class="text-gray-600 mb-4">ចេកណាំវ៉ាស្រស់ ផ្អែម ក្លិនឈ្ងុយ ល្អសម្រាប់សុខភាព។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.00 / kg</span>
+                    <button onclick="openAbaKhqrModal('1.00', 'Banana')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-6GoLpPXoOkT0lAuFcxXwJSQ7nxtRQqVJLg&s" alt="Orange" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ក្រូច</h3>
+                    <p class="text-gray-600 mb-4">ក្រូចស្រស់ មានជាតិទឹកច្រើន ជូរអែម សម្បូរវីតាមីន C ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.80 / kg</span>
+                    <button onclick="openAbaKhqrModal('1.80', 'Orange')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX7zCb0eClvEnEZEQ3jcBTB0tV5gVXnBVDHQ&s" alt="Mango" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ស្វាយ</h3>
+                    <p class="text-gray-600 mb-4">ស្វាយស្រស់ ផ្អែមឆ្ងាញ់ ល្អសម្រាប់ញ៉ាំផ្ទាល់ ឬធ្វើទឹកក្រឡុក។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$2.00 / kg</span>
+                    <button onclick="openAbaKhqrModal('2.00', 'Mango')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://www.collinsdictionary.com/images/thumb/strawberry_227472010_250.jpg" alt="Strawberry" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ស្ត្របឺរី</h3>
+                    <p class="text-gray-600 mb-4">ស្ត្របឺរីស្រស់ ផ្អែមជូរ មានក្លិនក្រអូបឈ្ងុយឆ្ងាញ់។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$4.50 / punnet</span>
+                    <button onclick="openAbaKhqrModal('4.50', 'Strawberry')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+            </section>
+
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Bakery">នំ</h2>
+            <section class="product-grid-container hidden-section" data-section-category="bakery">
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://assets.tmecosys.com/image/upload/t_web_rdp_recipe_584x480/img/recipe/ras/Assets/57618e37-2445-4835-b872-5af36ac5dcb0/Derivates/588f2b19-6a23-4643-a59e-8335def06f79.jpg" alt="Sourdough Bread" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">នំប៉័ង Sourdough</h3>
+                    <p class="text-gray-600 mb-4">នំប៉័ង Sourdough ស្រស់ៗ ក្លិនឈ្ងុយឆ្ងាញ់ ធ្វើដោយដៃ។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$3.50</span>
+                    <button onclick="openAbaKhqrModal('3.50', 'Sourdough Bread')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiDtkdyRh2yjlRKvzCN-zboBk2zQt-AqGKzg&s" alt="Chocolate Croissant" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">នំ Croissant សូកូឡា</h3>
+                    <p class="text-gray-600 mb-4">នំ Croissant ស្រួយៗ ជាមួយសូកូឡាឆ្ងាញ់ពិសា។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$2.00</span>
+                    <button onclick="openAbaKhqrModal('2.00', 'Chocolate Croissant')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9eaARpTwsewEXfERwMiG--GFBO549IdljiQ&s" alt="Vanilla Cupcake" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">នំ Cupcake វ៉ានីឡា</h3>
+                    <p class="text-gray-600 mb-4">នំ Cupcake វ៉ានីឡា ស្រាលៗ តុបតែងយ៉ាងស្រស់ស្អាត។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.50</span>
+                    <button onclick="openAbaKhqrModal('1.50', 'Vanilla Cupcake')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGpOcBN7m-pfAwfMLVPsFBrnuksboZdcq8dQ&s" alt="Blueberry Muffin" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">នំ Muffin ប៊្លូបឺរី</h3>
+                    <p class="text-gray-600 mb-4">នំ Muffin ទន់ៗ ជាមួយប៊្លូបឺរីស្រស់ៗ ល្អសម្រាប់អាហារពេលព្រឹក។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.75</span>
+                    <button onclick="openAbaKhqrModal('1.75', 'Blueberry Muffin')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+            </section>
+
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Packaged Food">អាហារវេចខ្ចប់</h2>
+            <section class="product-grid-container hidden-section" data-section-category="packaged food">
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://i5.walmartimages.com/seo/Lay-s-Classic-Potato-Chips-8-oz-Bag_f1852517-59f2-467f-b176-3ea1f2b098ae.a06a239111071c1595ab75cf3bf2323f.jpeg" alt="Lays Classic Chips" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Lays Classic Chips</h3>
+                    <p class="text-gray-600 mb-4">Lays Classic Chips រសជាតិដើម ស្រួយឆ្ងាញ់ ល្អសម្រាប់ញ៉ាំលេង។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.20</span>
+                    <button onclick="openAbaKhqrModal('1.20', 'Lays Classic Chips')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTz06l8G8nJ596dIyYgjcSapIFaigfCsIGCZQ&s" alt="Oreo Cookies" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">នំ Oreo</h3>
+                    <p class="text-gray-600 mb-4">នំ Oreo រសជាតិសូកូឡា និងក្រែម ដ៏ពេញនិយម។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$2.50</span>
+                    <button onclick="openAbaKhqrModal('2.50', 'Oreo Cookies')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvHqHTvd--CSEVrdFSD8RXroTgt5n5GwjSvg&s" alt="Instant Noodles" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">មីកញ្ចប់</h3>
+                    <p class="text-gray-600 mb-4">មីកញ្ចប់រសជាតិសាច់គោ ងាយស្រួលរៀបចំ ឆ្ងាញ់ពិសា។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.50</span>
+                    <button onclick="openAbaKhqrModal('0.50', 'Instant Noodles')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_Wcmo2bQBMdQ3A_TOMOoWL-KXAqow8Q3giA&s" alt="Kellogg's Corn Flakes" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Kellogg's Corn Flakes</h3>
+                    <p class="text-gray-600 mb-4">Kellogg's Corn Flakes ស្រួយៗ ល្អសម្រាប់អាហារពេលព្រឹក។</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$4.00</span>
+                    <button onclick="openAbaKhqrModal('4.00', 'Kellogg\'s Corn Flakes')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        ទិញឥឡូវនេះ
+                    </button>
+                </div>
+            </section>
+
             <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Vegetables">បន្លែ</h2>
             <section class="product-grid-container hidden-section" data-section-category="vegetables">
                 <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
@@ -540,7 +654,6 @@
                 </div>
             </section>
 
-            <!-- Meat Section -->
             <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Meat">សាច់</h2>
             <section class="product-grid-container hidden-section" data-section-category="meat">
                 <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
@@ -585,13 +698,11 @@
         <footer class="w-full bg-gray-100 text-gray-600 p-4 text-center mt-8 shadow-inner">
             <p>&copy; 2025 MiNi 7 Market. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
             <div class="flex justify-center space-x-6 mt-4">
-                <!-- Facebook Icon (SVG for better scaling and styling) -->
                 <a href="https://www.facebook.com/share/1BqpiWyLDX/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-blue-500 transition-colors duration-300">
                     <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33V22C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
                     </svg>
                 </a>
-                <!-- Telegram Icon (SVG) -->
                 <a href="https://t.me/Dy_kilkilo" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-blue-500 transition-colors duration-300">
                     <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.305 7.785l-1.956 9.22c-.183.86-.693 1.056-1.402.668l-3.07-2.288-1.487 1.437c-.309.299-.53.51-.904.51l.114-3.022 5.538-5.064c.24-.22.45-.44.205-.66-.24-.22-.605-.055-.845.165l-6.07 4.71-2.92-1.025c-.85-.298-.86-.85-.175-1.11L15.93 7.23c.7-.27 1.3.17 1.075.855z"/>
@@ -601,7 +712,6 @@
         </footer>
     </div>
 
-    <!-- ABA KHQR Modal -->
     <div id="abaKhqrModal" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close-button" onclick="closeAbaKhqrModal()">&times;</button>
@@ -613,13 +723,8 @@
             </div>
             <div class="aba-khqr-amount" id="abaKhqrAmountDisplay"></div>
             <div class="aba-khqr-qr-container">
-                <img src="photo_2025-07-18_09-39-13.jpg" alt="ABA KHQR Code"> <!-- Updated QR code image -->
-            </div>
-            <div class="aba-khqr-instructions">
-                <p>សូមស្កេន QR Code នេះដើម្បីបង់ប្រាក់។</p>
-                <p>បន្ទាប់ពីបង់ប្រាក់រួច សូមចុចប៊ូតុង "បោះពុម្ព" ដើម្បីបោះពុម្ពវិក្កយបត្រ។</p>
-            </div>
-            <button class="aba-khqr-print-button" onclick="printReceipt()">បោះពុម្ព</button>
+                <img src="photo_2025-07-18_09-39-13.jpg" alt="ABA KHQR Code"> </div>
+            <button class="aba-khqr-print-button" onclick="printReceipt()">Buy Now</button>
         </div>
     </div>
 
@@ -647,6 +752,9 @@
                 'drinks': [],
                 'vegetables': [],
                 'meat': [],
+                'fruits': [], // Added new category
+                'bakery': [], // Added new category
+                'packaged food': [], // Added new category
                 // Add other categories as needed
             };
 
@@ -746,6 +854,9 @@
                 if (query === 'drinks') targetHeadingText = 'ភេសជ្ជៈ';
                 if (query === 'vegetables') targetHeadingText = 'បន្លែ';
                 if (query === 'meat') targetHeadingText = 'សាច់';
+                if (query === 'fruits') targetHeadingText = 'ផ្លែឈើ'; // Added Khmer for Fruits
+                if (query === 'bakery') targetHeadingText = 'នំ'; // Added Khmer for Bakery
+                if (query === 'packaged food') targetHeadingText = 'អាហារវេចខ្ចប់'; // Added Khmer for Packaged Food
                 // Add more mappings if other category headings are in Khmer
 
                 const targetHeading = document.querySelector(`h2[data-section-heading="${targetHeadingText}"]`);
