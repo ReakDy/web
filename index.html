@@ -7,209 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f8f8; /* Lighter background to match the image */
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        /* Custom styles for rounded corners and shadows (optional, as Tailwind has classes) */
-        .card {
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
-        }
-        /* Modal specific styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
-            display: none; /* Changed from flex to none by default */
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0; /* Still use opacity for transition */
-            transition: opacity 0.3s ease; /* Transition only opacity */
-        }
-        .modal-overlay.show {
-            display: flex; /* Changed from opacity/visibility to flex */
-            opacity: 1;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 30px; /* Increased padding */
-            border-radius: 12px; /* Slightly more rounded */
-            max-width: 450px; /* Slightly wider */
-            width: 90%; /* Responsive width */
-            text-align: center;
-            position: relative; /* For absolute positioning of close button */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* More prominent shadow */
-            transform: translateY(-20px); /* Initial slight raise */
-            transition: transform 0.3s ease;
-        }
-        .modal-overlay.show .modal-content {
-            transform: translateY(0); /* Drop into place */
-        }
-        .modal-close-button {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 1.8em; /* Larger close button */
-            color: #666;
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-        .modal-close-button:hover {
-            color: #333;
-        }
-        /* ABA KHQR specific styling within the modal */
-        .aba-khqr-header {
-            font-size: 1.8em; /* Larger header */
-            font-weight: bold;
-            color: #E4002B; /* ABA Red */
-            margin-bottom: 15px;
-        }
-        .aba-khqr-info p {
-            margin-bottom: 5px;
-            font-size: 1.1em;
-            color: #333;
-        }
-        .aba-khqr-amount {
-            font-size: 2.8em; /* Much larger amount */
-            font-weight: bold;
-            color: #E4002B; /* ABA Red */
-            margin: 20px 0;
-        }
-        .aba-khqr-qr-container img {
-            width: 100%;
-            max-width: 280px; /* Max size for QR */
-            height: auto;
-            margin: 0 auto;
-            display: block;
-            border: 1px solid #eee; /* Subtle border for QR */
-            padding: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for QR */
-        }
-        .aba-khqr-instructions {
-            margin-top: 25px;
-            font-size: 1em;
-            color: #555;
-            line-height: 1.4;
-        }
-        .aba-khqr-print-button {
-            background-color: #4f46e5; /* Tailwind indigo-500 */
-            color: white;
-            padding: 12px 25px; /* Larger button */
-            border-radius: 8px; /* More rounded */
-            margin-top: 30px;
-            cursor: pointer;
-            border: none;
-            font-size: 1.1em;
-            font-weight: bold;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-        }
-        .aba-khqr-print-button:hover {
-            background-color: #4338ca; /* Darker indigo on hover */
-            transform: translateY(-1px);
-        }
-        /* Styling for print output only */
-        @media print {
-            body > *:not(.modal-overlay.show) {
-                display: none !important; /* Hide everything except the visible modal */
-            }
-            .modal-overlay {
-                position: static !important; /* Remove fixed positioning for print */
-                background-color: transparent !important; /* No background overlay */
-                opacity: 1 !important;
-                visibility: visible !important;
-                display: block !important;
-                padding: 0;
-                margin: 0;
-            }
-            .modal-content {
-                box-shadow: none !important; /* No shadow in print */
-                border-radius: 0 !important; /* No border-radius in print */
-                padding: 0 !important;
-                max-width: 100% !important;
-                width: auto !important;
-                transform: none !important;
-            }
-            .modal-close-button, .aba-khqr-print-button, #paymentStatusMessage {
-                display: none !important; /* Hide buttons and status message in print */
-            }
-            .aba-khqr-qr-container img {
-                border: none !important; /* No border for QR in print */
-                box-shadow: none !important; /* No shadow for QR in print */
-            }
-        }
-        /* Product grid container */
-        .product-grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
-            gap: 24px; /* Gap between cards */
-            max-width: 1200px; /* Max width for the grid */
-            margin-bottom: 40px; /* Space below the grid */
-            padding: 20px;
-            width: 100%;
-            box-sizing: border-box; /* Include padding in width calculation */
-        }
-
-        /* Style for hidden sections/products */
-        .hidden-section {
-            display: none !important;
-        }
-
-        /* Custom .hidden class to ensure display: none is always applied */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Custom styling for the promotional banner */
-        .promo-banner {
-            background-image: url('image_d0ce00.png'); /* Set to the "Fresh Groceries" banner image */
-            background-size: cover;
-            background-position: center;
-            border-radius: 1rem; /* rounded-xl */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            min-height: 180px; /* Adjusted height for better visual */
-        }
-
-        /* Category icon styling */
-        .category-icon-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 90px; /* Fixed width for each icon */
-            height: 90px; /* Fixed height for each icon */
-            background-color: white;
-            border-radius: 1rem; /* rounded-xl */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            flex-shrink: 0; /* Prevent shrinking in flex container */
-        }
-        .category-icon-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-        .category-icon-item i {
-            font-size: 2.2rem; /* Larger icon size */
-            color: #20c997; /* Teal color for icons */
-            margin-bottom: 0.5rem;
-        }
-        .category-icon-item span {
-            font-size: 0.9rem;
-            color: #333;
-            font-weight: 500;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link
 </head>
 <body>
 
@@ -254,8 +53,8 @@
                         display: none;
                     }
                     .hide-scrollbar {
-                        -ms-overflow-style: none;  /* IE and Edge */
-                        scrollbar-width: none;  /* Firefox */
+                        -ms-overflow-style: none;  
+                        scrollbar-width: none; 
                     }
                 </style>
                 <div class="category-icon-item" onclick="filterByCategory('all')">
@@ -266,9 +65,9 @@
                     <i class="fas fa-apple-alt"></i>
                     <span>Fruits</span>
                 </div>
-                <div class="category-icon-item" onclick="filterByCategory('vegetables')">
-                    <i class="fas fa-carrot"></i>
-                    <span>Vegetables</span>
+                <div class="category-icon-item" onclick="filterByCategory('clothe store')">
+                    <i class="fas fa-tshirt"></i>
+                    <span>Clothe store</span>
                 </div>
                 <div class="category-icon-item" onclick="filterByCategory('bakery')">
                     <i class="fas fa-bread-slice"></i>
@@ -282,9 +81,9 @@
                     <i class="fas fa-beer"></i>
                     <span>Drinks</span>
                 </div>
-                <div class="category-icon-item" onclick="filterByCategory('meat')">
-                    <i class="fas fa-drumstick-bite"></i>
-                    <span>Meat</span>
+                <div class="category-icon-item" onclick="filterByCategory('electronic')">
+                    <i class="fas fa-laptop"></i>
+                    <span>Electronic</span>
                 </div>
             </section>
 
@@ -462,6 +261,37 @@
                 </div>
             </section>
 
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Clothe store">ហាងសម្លៀកបំពាក់</h2>
+            <section class="product-grid-container hidden-section" data-section-category="clothe store">
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROO0L3qrXFV4GrgYdZTYJQWIeZY-Xue-RqRw&s" alt="T-Shirt" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Placeholder T-Shirt</h3>
+                    <p class="text-gray-600 mb-4">A comfortable and stylish t-shirt for everyday wear.</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$15.00</span>
+                    <button onclick="openAbaKhqrModal('15.00', 'Placeholder T-Shirt')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        Buy Now
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://rukminim3.flixcart.com/image/388/494/xif0q/jean/7/f/p/30-200-baggy-bl-92-fader-original-imahfwmhgdhufxy6.jpeg?q=60&crop=false" alt="Jeans" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Placeholder Jeans</h3>
+                    <p class="text-gray-600 mb-4">Classic fit jeans, durable and comfortable.</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$45.00</span>
+                    <button onclick="openAbaKhqrModal('45.00', 'Placeholder Jeans')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        Buy Now
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsdBGMIlNM4l4rXd0A-B-nt8BJafbfYn4rvw&s" alt="Dress" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Placeholder Dress</h3>
+                    <p class="text-gray-600 mb-4">An elegant dress for any special occasion.</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$60.00</span>
+                    <button onclick="openAbaKhqrModal('60.00', 'Placeholder Dress')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        Buy Now
+                    </button>
+                </div>
+            </section>
+
             <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Bakery">នំ</h2>
             <section class="product-grid-container hidden-section" data-section-category="bakery">
                 <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
@@ -541,160 +371,40 @@
                     </button>
                 </div>
             </section>
+            
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Electronic">Electronic</h2>
+            <section class="product-grid-container hidden-section" data-section-category="electronic">
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvvhpEN-vNu-FWcreL1wVz0fik9xdZuezzpQ&s" alt="Laptop" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Laptop</h3>
+                    <p class="text-gray-600 mb-4">A powerful and portable laptop for all your computing needs.</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$999.00</span>
+                    <button onclick="openAbaKhqrModal('999.00', 'Laptop')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        Buy Now
+                    </button>
+                </div>
 
-            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Vegetables">បន្លែ</h2>
-            <section class="product-grid-container hidden-section" data-section-category="vegetables">
                 <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd_IjOiPxkpz-0V9UCzKmAZae1EFiGsYd5RA&s" alt="Broccoli" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ផ្កាខាត់ណាខៀវស្រស់</h3>
-                    <p class="text-gray-600 mb-4">ផ្កាខាត់ណាខៀវក្នុងស្រុក សរីរាង្គ ល្អសម្រាប់ចំហុយ ឬឆា។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$3.99 / kg</span>
-                    <button onclick="openAbaKhqrModal('3.99', 'Broccoli')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOAaqn-H__MhvYCfcYgYa9QBF3GN6XbJtkoA&s" alt="Smartphone" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Smartphone</h3>
+                    <p class="text-gray-600 mb-4">This is a placeholder product. Please provide details to update.</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$499.00</span>
+                    <button onclick="openAbaKhqrModal('0.00', 'Smartphone')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        Buy Now
                     </button>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://5.imimg.com/data5/EX/PC/MY-51545753/selection_587.png" alt="Carrots" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ការ៉ុតស្រស់</h3>
-                    <p class="text-gray-600 mb-4">ការ៉ុតផ្អែម និងស្រួយ ល្អឥតខ្ចោះសម្រាប់ញ៉ាំ ឬចម្អិន។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.50 / kg</span>
-                    <button onclick="openAbaKhqrModal('1.50', 'Carrots')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://cdn.shopify.com/s/files/1/0824/4857/files/spinach_large.jpg?v=1490961229" alt="Spinach" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ស្ពៃខ្មៅសរីរាង្គ</h3>
-                    <p class="text-gray-600 mb-4">ស្លឹកស្ពៃខ្មៅស្រស់ សម្បូរជីវជាតិសម្រាប់សាឡាដ និងអាហាររបស់អ្នក។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.50 / bunch</span>
-                    <button onclick="openAbaKhqrModal('0.50', 'Spinach')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://bjs.scene7.com/is/image/bjs/15571?$bjs-Initial600$" alt="Cabbage" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ស្ពៃក្តោប</h3>
-                    <p class="text-gray-600 mb-4">ស្ពៃក្តោបស្រស់ និងមានប្រយោជsន៍ ល្អឥតខ្ចោះសម្រាប់ coleslaw ឬឆា។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.50 / head</span>
-                    <button onclick="openAbaKhqrModal('1.50', 'Cabbage')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://www.tasteofhome.com/wp-content/uploads/2019/07/Chinese-eggplant-shutterstock_2033421.jpg" alt="Eggplant" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ត្រប់</h3>
-                    <p class="text-gray-600 mb-4">ត្រប់ទន់ និងមានរសជាតិឆ្ងាញ់ ល្អសម្រាប់ដុត ឬដុតនំ។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.75 / kg</span>
-                    <button onclick="openAbaKhqrModal('1.75', 'Eggplant')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://www.telegraph.co.uk/content/dam/briefs/2025/04/30/TELEMMGLPICT000421134667_17460223214200_trans_NvBQzQNjv4BqNJ-LQvq2P5DIswYl2XeNFI064TIrcX_7tT0sGCZw0_A.jpeg?imwidth=640" alt="Potato" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ដំឡូងបារាំង</h3>
-                    <p class="text-gray-600 mb-4">ដំឡូងបារាំងចម្រុះ ល្អឥតខ្ចោះសម្រាប់បុក ដុតនំ ឬចៀន។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$3.50 / kg</span>
-                    <button onclick="openAbaKhqrModal('3.50', 'Potato')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://seedsofplenty.com.au/cdn/shop/products/V-OTH-01p1_grande.jpg?v=1670214705" alt="Parsnip" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ឆៃផាវ</h3>
-                    <p class="text-gray-600 mb-4">ផាសនីបផ្អែម និងមានរសជាតិដី ល្អសម្រាប់អាំង ឬស្ងោរ។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$2.20 / kg</span>
-                    <button onclick="openAbaKhqrModal('2.20', 'Parsnip')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://s5.kh1.co/d7/d7d4cea66e93c6dd2f1b16e79ead46b2542950d8.jpg" alt="Ginger" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ខ្ញី</h3>
-                    <p class="text-gray-600 mb-4">ខ្ញីស្រស់ មានរសជាតិហឹរឆ្ងាញ់ សម្រាប់ធ្វើម្ហូប ឬតែ។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.70 / 100g</span>
-                    <button onclick="openAbaKhqrModal('0.70', 'Ginger')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxzUlrfnxSrwA6e3ksStmeEN7b3RIoWjRxyw&s" alt="Bell Pepper" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ម្ទេសប្លោក</h3>
-                    <p class="text-gray-600 mb-4">ម្ទេសប្លោកស្រស់ ពណ៌ស្រស់ឆើតឆាយ និងមានរសជាតិផ្អែម ល្អសម្រាប់សាឡាដ ឬឆា។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.20 / kg</span>
-                    <button onclick="openAbaKhqrModal('1.20', 'Bell Pepper')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR18JdTa_4vi7dPnqWqzLXGblBsUtN-6oIrEA&s" alt="Onion" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ខ្ទឹមបារាំង</h3>
-                    <p class="text-gray-600 mb-4">ខ្ទឹមបារាំងស្រស់ សម្រាប់បន្ថែមរសជាតិដល់មុខម្ហូបរបស់អ្នក។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.00 / kg</span>
-                    <button onclick="openAbaKhqrModal('1.00', 'Onion')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://aeoncambodia.sgp1.digitaloceanspaces.com/image/products/20241224/1735019386-14339.jpg" alt="Garlic" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ខ្ទឹមស</h3>
-                    <p class="text-gray-600 mb-4">ខ្ទឹមសស្រស់ សម្រាប់បន្ថែមរសជាតិឈ្ងុយឆ្ងាញ់ដល់មុខម្ហូបរបស់អ្នក។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.80 / 100g</span>
-                    <button onclick="openAbaKhqrModal('0.80', 'Garlic')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF6uTMq8LogqEYRCZFal-XUqjGLbdP6IAtDA&s" alt="Lettuce" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">សាឡាដ</h3>
-                    <p class="text-gray-600 mb-4">សាឡាដស្រស់ សម្រាប់ធ្វើសាឡាដ ឬប៊ឺហ្គឺ។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.75 / head</span>
-                    <button onclick="openAbaKhqrModal('0.75', 'Lettuce')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-            </section>
 
-            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Meat">សាច់</h2>
-            <section class="product-grid-container hidden-section" data-section-category="meat">
                 <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://images.khmer24.co/profiles/pictures/21-04-27/p70161608136253_561420_1619498195_95.jpg" alt="Chicken Breast" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">សាច់មាន់</h3>
-                    <p class="text-gray-600 mb-4">សាច់មាន់ស្រស់ សម្រាប់ធ្វើម្ហូបជាច្រើនប្រភេទ។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$5.50 / kg</span>
-                    <button onclick="openAbaKhqrModal('5.50', 'Chicken Breast')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://niront.com/cdn/shop/files/product-350123.jpg?v=1723222656" alt="Beef Steak" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">សាច់គោ</h3>
-                    <p class="text-gray-600 mb-4">សាច់គោស្រស់ សម្រាប់អាំង ឬបំពង។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$12.00 / kg</span>
-                    <button onclick="openAbaKhqrModal('12.00', 'Beef Steak')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3NqMls-O0Co7j8a7UBJGMRhp_tqIthXn3Fg&s" alt="Salmon Fillet" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ត្រីសាលម៉ុន</h3>
-                    <p class="text-gray-600 mb-4">ត្រីសាលម៉ុនស្រស់ សម្បូរបែបដោយ Omega-3 ល្អសម្រាប់សុខភាព។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$15.00 / kg</span>
-                    <button onclick="openAbaKhqrModal('15.00', 'Salmon Fillet')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://camhappymart.com/storage/app/public/product/2023-01-13-63c0d2dba7d0b.png" alt="Pork Loin" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">សាច់ជ្រូក</h3>
-                    <p class="text-gray-600 mb-4">សាច់ជ្រូកស្រស់ សម្រាប់ធ្វើម្ហូបផ្សេងៗ។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$5.50 / kg</span>
-                    <button onclick="openAbaKhqrModal('5.50', 'Pork Loin')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR8FaQRo8Y1QxIl8nV60kZNoZSNsi2zX3zKA&s" alt="Tech Gadget" class="rounded-lg mb-4 w-full h-48 object-cover">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Tech Gadget</h3>
+                    <p class="text-gray-600 mb-4">This is a placeholder product. Please provide details to update.</p>
+                    <span class="text-blue-600 text-2xl font-bold mb-4">$1499.00</span>
+                    <button onclick="openAbaKhqrModal('0.00', 'Tech Gadget')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+                        Buy Now
                     </button>
                 </div>
             </section>
         </main>
-
         <footer class="w-full bg-gray-100 text-gray-600 p-4 text-center mt-8 shadow-inner">
             <p>&copy; 2025 MiNi 7 Market. រក្សាសិទ្ធិគ្រប់យ៉ាង។</p>
             <div class="flex justify-center space-x-6 mt-4">
@@ -753,9 +463,10 @@
                 'vegetables': [],
                 'meat': [],
                 'fruits': [], // Added new category
+                'clothe store': [], // Added new category
                 'bakery': [], // Added new category
                 'packaged food': [], // Added new category
-                // Add other categories as needed
+                'electronic': [] // All electronic-related items are now here
             };
 
             // Populate initialProductCards and categorizedProductCards
@@ -855,8 +566,10 @@
                 if (query === 'vegetables') targetHeadingText = 'បន្លែ';
                 if (query === 'meat') targetHeadingText = 'សាច់';
                 if (query === 'fruits') targetHeadingText = 'ផ្លែឈើ'; // Added Khmer for Fruits
+                if (query === 'clothe store') targetHeadingText = 'ហាងសម្លៀកបំពាក់'; // Added Khmer for Clothe store
                 if (query === 'bakery') targetHeadingText = 'នំ'; // Added Khmer for Bakery
                 if (query === 'packaged food') targetHeadingText = 'អាហារវេចខ្ចប់'; // Added Khmer for Packaged Food
+                if (query === 'electronic') targetHeadingText = 'Electronic'; // Updated for combined electronic category
                 // Add more mappings if other category headings are in Khmer
 
                 const targetHeading = document.querySelector(`h2[data-section-heading="${targetHeadingText}"]`);
