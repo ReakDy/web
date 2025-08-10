@@ -77,139 +77,130 @@
                     <i class="fas fa-box-open"></i>
                     <span>Packaged Food</span>
                 </div>
-                <div class="category-icon-item" onclick="filterByCategory('drinks')">
-                    <i class="fas fa-beer"></i>
-                    <span>Drinks</span>
-                </div>
+                <div class="category-icon-item" onclick="filterByCategory('vegetables')">
+                    <i class="fas fa-carrot"></i>
+                    <span>Vegetable</span>
+                    </div>
                 <div class="category-icon-item" onclick="filterByCategory('electronic')">
                     <i class="fas fa-laptop"></i>
                     <span>Electronic</span>
                 </div>
+                <div class="category-icon-item" onclick="filterByCategory('drinks')">
+    <i class="fas fa-beer"></i>
+    <span>Drinks</span>
+</div>
             </section>
 
             <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left" data-section-heading="Save Big on These">Save Big on These</h2>
             <section class="product-grid-container" data-section-category="all-products-display">
                 </section>
-
-
-            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Drinks">ភេសជ្ជៈ</h2>
-            <section class="product-grid-container hidden-section" data-section-category="drinks">
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFJpyvrfIXJN7qZkF8ooO5AWb0IfSDHs5Vhg&s" alt="Passion Fruit Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Passion Fruit Drink</h3>
-                    <p class="text-gray-600 mb-4">ភេសជ្ជៈផ្លែផាសសិន បំពេញជាតិស្ករ និងផ្លែពោរពេញដោយក្ដារផ្លែ វិធីផ្សំច្រើនប្រភេទ៖ canned juice, sparkling water mix។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.40 </span>
-                    <button onclick="openAbaKhqrModal('1.40', 'Passion Fruit Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញពេលនេះ
-                    </button>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition duration-300">
-                    <img src="https://content-prod-live.cert.starbucks.com/binary/v2/asset/137-98075.jpg" alt="Cold Brew Coffee" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Cold Brew Coffee</h3>
-                    <p class="text-gray-600 mb-4">កាហ្វេត្រជាក់ (cold brew) 100% Arabica, មាន caffeine 150‑200 mg ក្នុងកែវ 355 ml។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$2.99</span>
-                    <button onclick="openAbaKhqrModal('2.99', 'Cold Brew Coffee')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញពេលនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://www.starbucks.co.nz/content/menu/0591483001647828269.jpg" alt="POKKA Green Tea" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2"> Green Tea </h3>
-                    <p class="text-gray-600 mb-4">តែបៃតងជំពាក់តិចស្ករ (~1.2 $), គ្រប់លក្ខណៈ ៣៦០ ml, បានលក់នៅកម្ពុជា</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$1.20</span>
-                    <button onclick="openAbaKhqrModal('1.20', 'Green Tea')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញពេលនេះ
-                    </button>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://cdn.s-liquor.com.kh/sliquors3/wp-content/uploads/2020/07/Carabao.jpg?strip=all&lossy=1&webp=85&avif=80&ssl=1" alt="Carabao Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Carabao Energy Drink</h3>
-                    <p class="text-gray-600 mb-4">ភេសជ្ជៈថាមពលនាំមកពីថៃ មាន 106 mg caffeine ក្នុង can 330 ml និង 15 g ស្ករ។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65 </span>
-                    <button onclick="openAbaKhqrModal('0.65', 'Carabao Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញពេលនេះ
-                    </button>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://www.monde-selection.com/wp-content/uploads/2023/06/1040397.png" alt="Boostrong Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Boostrong Energy Drink</h3>
-                    <p class="text-gray-600 mb-4">ភេសជ្ជៈថាមពលខ្មែរ ពោរពេញដោយ B‑vitamins, taurine និង caffeine សម្រាប់ផ្តល់ថាមពលខ្លាំង។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65 </span>
-                    <button onclick="openAbaKhqrModal('0.65', 'Boostrong Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញពេលនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://www.monde-selection.com/wp-content/uploads/2023/04/1039137.png" alt="Ize Cola" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Ize Cola</h3>
-                    <p class="text-gray-600 mb-4">ភេសជ្ជៈកូឡាជាតិខ្មែរ មានជាតិស្ករច្រើនទាប  និង caffeine បញ្ចូលក្នុង carbonated water។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.50</span>
-                    <button onclick="openAbaKhqrModal('0.50', 'Ize Cola')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញពេលនេះ
-                    </button>
-                </div>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="vegetables">បន្លែ</h2>
+            <section class="product-grid-container hidden-section" data-section-category="vegetables">
+               <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSTmg7nyUGCRgYnF2gukqRB1ZZ8gra7i1ycg&s" alt="Spinach" class="rounded-lg mb-4 w-full h-48 object-cover">
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">ស្ពៃខ្មៅ</h3>
+    <p class="text-gray-600 mb-4">ស្ពៃខ្មៅស្រស់ៗ គ្មានជាតិគីមី ផ្តល់ជីវជាតិល្អសម្រាប់សុខភាព។</p>
+    <span class="text-blue-600 text-2xl font-bold mb-4">$1.50</span>
+    <button onclick="openAbaKhqrModal('1.50', 'Spinach')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+      ទិញពេលនេះ
+    </button>
+  </div>
+  <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition duration-300">
+    <img src="https://media.brandbodia.com/wp-content/uploads/2023/03/IMG_4401-1024x768.png" alt="Broccoli" class="rounded-lg mb-4 w-full h-48 object-cover">
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">ផ្កាខាត់ណាខៀវ</h3>
+    <p class="text-gray-600 mb-4">ផ្កាខាត់ណាខៀវស្រស់ ផ្ទុកទៅដោយវីតាមីន និងសារធាតុរ៉ែជាច្រើន។</p>
+    <span class="text-blue-600 text-2xl font-bold mb-4">$2.00</span>
+    <button onclick="openAbaKhqrModal('2.00', 'Broccoli')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+      ទិញពេលនេះ
+    </button>
+  </div>
+  <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+    <img src="https://s3.ams.com.kh/economy/2023/07/Carrot_crop.jpg" alt="Carrots" class="rounded-lg mb-4 w-full h-48 object-cover">
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">ការ៉ុត</h3>
+    <p class="text-gray-600 mb-4">ការ៉ុតស្រស់ៗល្អសម្រាប់សុខភាពភ្នែក និងស្បែក។</p>
+    <span class="text-blue-600 text-2xl font-bold mb-4">$1.00</span>
+    <button onclick="openAbaKhqrModal('1.00', 'Carrots')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+      ទិញពេលនេះ
+    </button>
+  </div>
+  <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK8XgF2o3XL_icRP-TIu6FPnNM7tJ57cqdAQ&s" alt="Cucumber" class="rounded-lg mb-4 w-full h-48 object-cover">
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">ត្រសក់</h3>
+    <p class="text-gray-600 mb-4">ត្រសក់ស្រស់ ផ្តល់ជាតិទឹក និងវីតាមីនល្អសម្រាប់រាងកាយ។</p>
+    <span class="text-blue-600 text-2xl font-bold mb-4">$0.75</span>
+    <button onclick="openAbaKhqrModal('0.75', 'Cucumber')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+      ទិញពេលនេះ
+    </button>
+  </div>
+  <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVC6vFUhuxsmsArjKp-w-eBpZKgAWnnOIMjQ&s" alt="Bell Peppers" class="rounded-lg mb-4 w-full h-48 object-cover">
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">ម្ទេសផ្លោក</h3>
+    <p class="text-gray-600 mb-4">ម្ទេសផ្លោកស្រស់ៗ ពណ៌ស្រស់ឆើតឆាយល្អសម្រាប់ចម្អិនអាហារ។</p>
+    <span class="text-blue-600 text-2xl font-bold mb-4">$1.75</span>
+    <button onclick="openAbaKhqrModal('1.75', 'Bell Peppers')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+      ទិញពេលនេះ
+    </button>
+  </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://s3.ap-southeast-1.wasabisys.com/sliquors3/wp-content/uploads/2020/07/Red-Bull-250ml-01.png" alt="Red Bull Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Red Bull Energy Drink</h3>
-                    <p class="text-gray-600 mb-4">ភេសជ្ជៈថាមពលទ្រង់ទ្រាយម៉ុសខេត្តស្ករនិងដែកសារធាតុ B‑vitamins ទឹកកក និង taurine។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65</span>
-                    <button onclick="openAbaKhqrModal('0.65', 'Red Bull Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
+    <img src="https://farmerglobe.com/wp-content/uploads/2022/06/photo_2022-05-29_08-53-07-300x300.jpg" alt="Water Spinach (Trokoun)" class="rounded-lg mb-4 w-full h-48 object-cover">
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">ត្រកួន (Water Spinach)</h3>
+    <p class="text-gray-600 mb-4">បន្លែស្លឹកបៃតងស្រស់ ដែលសម្បូរទៅដោយជាតិដែក វីតាមីន A និង C។</p>
+    <span class="text-blue-600 text-2xl font-bold mb-4">$1.50</span>
+    <button onclick="openAbaKhqrModal('1.50', 'Water Spinach')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+        ទិញឥឡូវនេះ
+    </button>
+</div>
 
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://www.championgroup.com.kh/wp-content/uploads/2025/05/champion-Green-768x768.png" alt="Champion Green Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Champion Green Energy Drink</h3>
-                    <p class="text-gray-600 mb-4">ភេសជ្ជៈថាមពលបៃតងថ្មីពី Champion Group ប្រើបច្ចេកវិទ្យាជាតិក្រុមសហព័ន្ធអ៊ឺរ៉ុប។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65</span>
-                    <button onclick="openAbaKhqrModal('0.65', 'Champion Green Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
+<div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+    <img src="https://static.information.gov.kh/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBd2ovQXc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--4644c37e74a9f3c34be75987291cfd2da2e757bd/7AC84CBB-FBD1-45BF-B40E-A44B38C.jpeg" alt="Morning Glory (Spey Kranhay)" class="rounded-lg mb-4 w-full h-48 object-cover">
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">ស្ពៃក្រញ៉ាញ់ (Morning Glory)</h3>
+    <p class="text-gray-600 mb-4">បន្លែស្លឹកម្យ៉ាង ដែលមានរសជាតិឆ្ងាញ់ និងងាយស្រួលក្នុងការចម្អិន។</p>
+    <span class="text-blue-600 text-2xl font-bold mb-4">$1.75</span>
+    <button onclick="openAbaKhqrModal('1.75', 'Morning Glory')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+        ទិញឥឡូវនេះ
+    </button>
+</div>
 
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://cdn.s-liquor.com.kh/sliquors3/wp-content/uploads/2022/11/Sting.jpg?strip=all&lossy=1&webp=85&avif=80&ssl=1" alt="Sting Red (Strawberry)" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Sting Red (Strawberry)</h3>
-                    <p class="text-gray-600 mb-4">ភេសជ្ជៈថាមពលរសជាតិស្ត្របឺរី មាន caffeine ប្រហែល 72 mg/250 ml និងត្រាំតែមធ្យម។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65</span>
-                    <button onclick="openAbaKhqrModal('0.65', 'Sting Red (Strawberry)')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
+<div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+    <img src="https://s3-ap-southeast-1.amazonaws.com/amk-emarket-ph1-production/assets/b0b3d701-84a1-45e1-9d15-ed7eba391d3b.jpg" alt="Chinese Kale (Khana Daem)" class="rounded-lg mb-4 w-full h-48 object-cover">
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">ខាត់ណាដើម (Chinese Kale)</h3>
+    <p class="text-gray-600 mb-4">ខាត់ណាដើមមានរសជាតិផ្អែមឆ្ងាញ់ អាចយកទៅឆា ឬស្ងោរបាន។</p>
+    <span class="text-blue-600 text-2xl font-bold mb-4">$2.00</span>
+    <button onclick="openAbaKhqrModal('2.00', 'Chinese Kale')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+        ទិញឥឡូវនេះ
+    </button>
+</div>
 
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMuzYGVMn8fyIBX20noPAtO_v0cuFYks0P5A&sg" alt="Wurkz Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Wurkz Energy Drink</h3>
-                    <p class="text-gray-600 mb-4">ផលិតផលមីណ្ឌមកពីកម្ពុជាដែលបានទទួល Gold និង Silver Award ពី Monde Selection ជាមួយ B‑vitamins ទាំងឡាយ។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65</span>
-                    <button onclick="openAbaKhqrModal('0.65', 'Wurkz Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញឥឡូវនេះ
-                    </button>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://www.monde-selection.com/wp-content/uploads/2023/04/1039997.png" alt="Krud Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Krud Energy Drink</h3>
-                    <p class="text-gray-600 mb-4">ស្រស់ប្លែក និងផ្តល់ថាមពលបរិច្ច័យ។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65</span>
-                    <button onclick="openAbaKhqrModal('0.65', 'Krud Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញពេលនេះ
-                    </button>
-                </div>
+<div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1pARM4rJ-DOc8FjFuQQLYlBc9vAjUaFLkPw&s" alt="Lime Leaves (Slek Krey)" class="rounded-lg mb-4 w-full h-48 object-cover">
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">ស្លឹកក្រី (Lime Leaves)</h3>
+    <p class="text-gray-600 mb-4">ស្លឹកក្រូចសើចមានក្លិនក្រអូប ប្រើសម្រាប់បន្ថែមរសជាតិម្ហូបផ្សេងៗ។</p>
+    <span class="text-blue-600 text-2xl font-bold mb-4">$0.50</span>
+    <button onclick="openAbaKhqrModal('0.50', 'Lime Leaves')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+        ទិញឥឡូវនេះ
+    </button>
+</div>
 
-                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://www.drgcambodia.com/wp-content/uploads/2021/11/vigor-power-energy-drink-cambodia.jpg" alt="Vigor Power Energy Drink" class="rounded-lg mb-4 w-full h-48 object-cover">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Vigor Power Energy Drink</h3>
-                    <p class="text-gray-600 mb-4">ផ្ដល់ថាមពលលឿន និងសារ៉ាប់សារ។</p>
-                    <span class="text-blue-600 text-2xl font-bold mb-4">$0.65 </span>
-                    <button onclick="openAbaKhqrModal('0.65', 'Vigor Power Energy Drink')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                        ទិញពេលនេះ
-                    </button>
-                </div>
+<div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+    <img src="https://lokbongrattanak2.wordpress.com/wp-content/uploads/2019/09/fb_img_1568573405499.jpg" alt="Winter Melon (Tralach)" class="rounded-lg mb-4 w-full h-48 object-cover">
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">ត្រឡាច (Winter Melon)</h3>
+    <p class="text-gray-600 mb-4">ផ្លែត្រឡាចស្រស់សម្រាប់យកទៅធ្វើម្ហូប ឬបង្អែមផ្សេងៗ។</p>
+    <span class="text-blue-600 text-2xl font-bold mb-4">$2.25</span>
+    <button onclick="openAbaKhqrModal('2.25', 'Winter Melon')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+        ទិញឥឡូវនេះ
+    </button>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+    <img src="https://naturmedscientific.com/wp-content/uploads/2024/05/Lycopene-Solanum-lycopersicum-scaled-1.jpg" alt="Winged Bean (Beng Paos)" class="rounded-lg mb-4 w-full h-48 object-cover">
+    <h3 class="text-xl font-semibold text-gray-800 mb-2">បេងប៉ោស (Winged Bean)</h3>
+    <p class="text-gray-600 mb-4">ផ្លែបេងបោះស្រស់ៗ សម្រាប់ស្ល ឬឆា។</p>
+    <span class="text-blue-600 text-2xl font-bold mb-4">$1.80</span>
+    <button onclick="openAbaKhqrModal('1.80', 'Winged Bean')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+        ទិញឥឡូវនេះ
+    </button>
+</div>
             </section>
 
             <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="Fruits">ផ្លែឈើ</h2>
@@ -403,6 +394,45 @@
                         Buy Now
                     </button>
                 </div>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 mt-8 text-center md:text-left hidden-section" data-section-heading="drinks">ភេសជ្ជៈ</h2>
+<section class="product-grid-container hidden-section" data-section-category="drinks">
+    <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+        <img src="https://www.coca-cola.com/content/dam/onexp/kh/en/brands/coca-cola/coca-cola-original-taste.png" alt="Coca-Cola" class="rounded-lg mb-4 w-full h-48 object-cover">
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Coca-Cola</h3>
+        <p class="text-gray-600 mb-4">ភេសជ្ជៈ Coca-Cola រសជាតិដើម ត្រជាក់ឆ្ងាញ់។</p>
+        <span class="text-blue-600 text-2xl font-bold mb-4">$1.00</span>
+        <button onclick="openAbaKhqrModal('1.00', 'Coca-Cola')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+            ទិញឥឡូវនេះ
+        </button>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+        <img src="https://dealshakerprod.blob.core.windows.net/default/assets/large_IMG_6415jpeg_f0u9BUhAr0OptrYExQcn6Q.jpeg" alt="Green Tea" class="rounded-lg mb-4 w-full h-48 object-cover">
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">តែបៃតង</h3>
+        <p class="text-gray-600 mb-4">តែបៃតងស្រស់ ផ្តល់អារម្មណ៍ស្រស់ស្រាយ និងល្អសម្រាប់សុខភាព។</p>
+        <span class="text-blue-600 text-2xl font-bold mb-4">$0.80</span>
+        <button onclick="openAbaKhqrModal('0.80', 'Green Tea')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+            ទិញឥឡូវនេះ
+        </button>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRud3aq93XHa10KOgGpadAYgKyXEQiqZAA_A&s" alt="Coffee" class="rounded-lg mb-4 w-full h-48 object-cover">
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">កាហ្វេ</h3>
+        <p class="text-gray-600 mb-4">កាហ្វេត្រជាក់ រសជាតិឆ្ងាញ់ ជួយបណ្ដេញភាពងងុយគេង។</p>
+        <span class="text-blue-600 text-2xl font-bold mb-4">$1.50</span>
+        <button onclick="openAbaKhqrModal('1.50', 'Coffee')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+            ទិញឥឡូវនេះ
+        </button>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center text-center transform hover:scale-105 transition-transform duration-300">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGDv24HFRKZ64hcapAnHIkeaZ55h595bdDBg&s" alt="Milk Tea" class="rounded-lg mb-4 w-full h-48 object-cover">
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">តែទឹកដោះគោ</h3>
+        <p class="text-gray-600 mb-4">តែទឹកដោះគោ រសជាតិដើម ផ្អែមឆ្ងាញ់ គួរជាទីគាប់ចិត្ត។</p>
+        <span class="text-blue-600 text-2xl font-bold mb-4">$2.00</span>
+        <button onclick="openAbaKhqrModal('2.00', 'Milk Tea')" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
+            ទិញឥឡូវនេះ
+        </button>
+    </div>
+</section>
             </section>
         </main>
         <footer class="w-full bg-gray-100 text-gray-600 p-4 text-center mt-8 shadow-inner">
@@ -436,9 +466,11 @@
                 <img src="photo_2025-07-18_09-39-13.jpg" alt="ABA KHQR Code"> </div>
             <button class="aba-khqr-print-button" onclick="printReceipt()">Buy Now</button>
         </div>
-    </div>
+    </div>    
+</section>
 
     <script>
+        
         let currentProductPrice = 0;
         let currentProductName = '';
 
@@ -466,7 +498,8 @@
                 'clothe store': [], // Added new category
                 'bakery': [], // Added new category
                 'packaged food': [], // Added new category
-                'electronic': [] // All electronic-related items are now here
+                'electronic': [], // All electronic-related items are now here
+                'Drinks' : []
             };
 
             // Populate initialProductCards and categorizedProductCards
